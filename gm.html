@@ -57,47 +57,56 @@
       }
     }
 
-    function creerBlocEquipe(nom, vie = 100, index) {
-      const container = document.getElementById("liste-equipes");
-      const teamBlock = document.createElement("div");
-      teamBlock.className = "team-block";
-      teamBlock.dataset.index = index;
+   function creerBlocEquipe(nom, vie = 100, index) {
+  const container = document.getElementById("liste-equipes");
+  const teamBlock = document.createElement("div");
+  teamBlock.className = "team-block";
+  teamBlock.dataset.index = index;
 
-      const input = document.createElement("input");
-      input.type = "text";
-      input.value = nom;
-      input.onchange = () => {
-        localStorage.setItem(`team${index}name`, input.value);
-      };
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = nom;
+  input.onchange = () => {
+    localStorage.setItem(`team${index}name`, input.value);
+  };
 
-      const plusBtn = document.createElement("button");
-      plusBtn.textContent = "+1";
-      plusBtn.onclick = () => {
-        let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
-        val = Math.min(100, val + 10);
-        localStorage.setItem(`life${index}`, val);
-      };
+  const plusBtn = document.createElement("button");
+  plusBtn.textContent = "+1";
+  plusBtn.onclick = () => {
+    let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
+    val = Math.min(100, val + 10);
+    localStorage.setItem(`life${index}`, val);
+    mettreAJourAffichageVie(index);
+  };
 
-      const minusBtn = document.createElement("button");
-      minusBtn.textContent = "-1";
-      minusBtn.onclick = () => {
-        let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
-        val = Math.max(0, val - 10);
-        localStorage.setItem(`life${index}`, val);
-      };
+  const minusBtn = document.createElement("button");
+  minusBtn.textContent = "-1";
+  minusBtn.onclick = () => {
+    let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
+    val = Math.max(0, val - 10);
+    localStorage.setItem(`life${index}`, val);
+    mettreAJourAffichageVie(index);
+  };
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "🗑️ Supprimer";
-      deleteBtn.className = "delete";
-      deleteBtn.onclick = () => supprimerEquipe(index);
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "🗑️ Supprimer";
+  deleteBtn.className = "delete";
+  deleteBtn.onclick = () => supprimerEquipe(index);
 
-      teamBlock.appendChild(input);
-      teamBlock.appendChild(plusBtn);
-      teamBlock.appendChild(minusBtn);
-      teamBlock.appendChild(deleteBtn);
+  const vieAffichee = document.createElement("span");
+  vieAffichee.id = `affichageVie${index}`;
+  vieAffichee.className = "vie";
+  vieAffichee.textContent = ` ${vie}% `;
+  mettreAJourAffichageVie(index); // Mise à jour de la couleur
 
-      container.appendChild(teamBlock);
-    }
+  teamBlock.appendChild(input);
+  teamBlock.appendChild(vieAffichee);
+  teamBlock.appendChild(plusBtn);
+  teamBlock.appendChild(minusBtn);
+  teamBlock.appendChild(deleteBtn);
+
+  container.appendChild(teamBlock);
+}
 
     function ajouterEquipe() {
       const name = document.getElementById("newTeamName").value.trim();
@@ -124,7 +133,22 @@
     function choisirManche(val) {
       localStorage.setItem("mancheActive", val);
     }
+function mettreAJourAffichageVie(index) {
+  const span = document.getElementById(`affichageVie${index}`);
+  if (span) {
+    const val = parseInt(localStorage.getItem(`life${index}`)) || 0;
+    span.textContent = ` ${val}% `;
+    span.className = "vie";
 
+    if (val >= 70) {
+      span.classList.add("green");
+    } else if (val >= 30) {
+      span.classList.add("orange");
+    } else {
+      span.classList.add("red");
+    }
+  }
+}
     function reinitialiser() {
       if (confirm("⚠️ Es-tu sûr de vouloir recommencer toute la partie ?")) {
         localStorage.clear();
