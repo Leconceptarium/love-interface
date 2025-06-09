@@ -112,18 +112,11 @@
     // 🔁 Boucle qui reconstruit les jauges si une équipe a été ajoutée
     let previousTeamCount = 0;
 
-    setInterval(() => {
-      let count = 0;
-      while (localStorage.getItem(`team${count + 1}name`)) count++;
-
-      if (count !== previousTeamCount) {
-        construireEquipes();
-        previousTeamCount = count;
-      }
-
-      updateJauges();
-      updateManche();
-    }, 1000);
+   setInterval(() => {
+  construireEquipes();  // Toujours reconstruire à chaque tick
+  updateJauges();
+  updateManche();
+}, 1000);
   </script>
 </body>
 </html>
