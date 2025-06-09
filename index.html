@@ -107,9 +107,19 @@
       }
     }
 
-    // Initialisation + boucle continue
-    construireEquipes();
+    // 🔁 Boucle qui reconstruit les jauges si une équipe a été ajoutée
+    let previousTeamCount = 0;
+
     setInterval(() => {
+      // Compte le nombre d'équipes enregistrées
+      let count = 0;
+      while (localStorage.getItem(`team${count + 1}name`)) count++;
+
+      if (count !== previousTeamCount) {
+        construireEquipes();
+        previousTeamCount = count;
+      }
+
       updateJauges();
       updateManche();
     }, 1000);
