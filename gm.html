@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>GM 💔 Amour Brisé</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: white; padding: 20px; }
+    input[type="text"] { margin: 5px; padding: 5px; }
+    button { margin: 5px; padding: 5px 10px; }
+    .team-block { margin-bottom: 15px; }
+  </style>
 </head>
 <body>
   <h1>Interface Game Master 💔</h1>
@@ -16,66 +22,88 @@
 
   <!-- 👥 LISTE DES ÉQUIPES -->
   <section id="liste-equipes">
-    <!-- Remplie dynamiquement -->
     <div class="team-block">
       <input type="text" value="Team Passion" onchange="changerNom(this)">
       <button onclick="ajouterPoint(this)">+1</button>
       <button onclick="retirerPoint(this)">-1</button>
     </div>
+    <div class="team-block">
+      <input type="text" value="Les Cœurs Brisés" onchange="changerNom(this)">
+      <button onclick="ajouterPoint(this)">+1</button>
+      <button onclick="retirerPoint(this)">-1</button>
+    </div>
   </section>
 
- <select onchange="choisirManche(this.value)">
-  <option value="">Choisir une manche</option>
-  <option value="rencard">Rencard ou Cauchemar</option>
-  <option value="blindtest">Blind Test Toxique</option>
-  <option value="cupidon">Cupidon Détraqué</option>
-  <option value="tentacule">Tentacule ou Tentation</option>
-  <option value="impossible">Amours Impossibles</option>
-</select>
+  <!-- 🎯 CHOIX DE LA MANCHE -->
+  <section>
+    <h2>Choisir une manche</h2>
+    <select onchange="choisirManche(this.value)">
+      <option value="">-- Choisir --</option>
+      <option value="rencard">Rencard ou Cauchemar</option>
+      <option value="blindtest">Blind Test Toxique</option>
+      <option value="cupidon">Cupidon Détraqué</option>
+      <option value="tentacule">Tentacule ou Tentation</option>
+      <option value="impossible">Amours Impossibles</option>
+    </select>
+  </section>
 
-<script>
-function ajouterEquipe() {
-  const name = document.getElementById("newTeamName").value;
-  if (!name) return;
+  <script>
+    function ajouterEquipe() {
+      const name = document.getElementById("newTeamName").value;
+      if (!name) return;
 
-  const teamBlock = document.createElement("div");
-  teamBlock.className = "team-block";
+      const teamBlock = document.createElement("div");
+      teamBlock.className = "team-block";
 
-  teamBlock.innerHTML = `
-    <input type="text" value="${name}" onchange="changerNom(this)">
-    <button onclick="ajouterPoint(this)">+1</button>
-    <button onclick="retirerPoint(this)">-1</button>
-  `;
+      const teamIndex = document.querySelectorAll(".team-block").length + 1;
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = name;
+      input.onchange = () => {
+        localStorage.setItem(`team${teamIndex}name`, input.value);
+      };
+      localStorage.setItem(`team${teamIndex}name`, name);
+      localStorage.setItem(`life${teamIndex}`, 100);
 
-  document.getElementById("liste-equipes").appendChild(teamBlock);
+      const plusBtn = document.createElement("button");
+      plusBtn.textContent = "+1";
+      plusBtn.onclick = () => ajouterPoint(teamBlock);
 
-  const id = "life" + (document.querySelectorAll('.team-block').length);
-  localStorage.setItem(id, 100);
-}
+      const minusBtn = document.createElement("button");
+      minusBtn.textContent = "-1";
+      minusBtn.onclick = () => retirerPoint(teamBlock);
 
-function changerNom(input) {
-  // facultatif : enregistrer le nom dans le localStorage si tu veux
-}
+      teamBlock.appendChild(input);
+      teamBlock.appendChild(plusBtn);
+      teamBlock.appendChild(minusBtn);
 
-function ajouterPoint(btn) {
-  const index = Array.from(document.querySelectorAll('.team-block')).indexOf(btn.parentElement);
-  const id = "life" + (index + 1);
-  let val = parseInt(localStorage.getItem(id)) || 100;
-  val = Math.min(100, val + 10);
-  localStorage.setItem(id, val);
-}
+      document.getElementById("liste-equipes").appendChild(teamBlock);
+    }
 
-function retirerPoint(btn) {
-  const index = Array.from(document.querySelectorAll('.team-block')).indexOf(btn.parentElement);
-  const id = "life" + (index + 1);
-  let val = parseInt(localStorage.getItem(id)) || 100;
-  val = Math.max(0, val - 10);
-  localStorage.setItem(id, val);
-}
+    function changerNom(input) {
+      const index = [...document.querySelectorAll('.team-block input')].indexOf(input);
+      localStorage.setItem(`team${index + 1}name`, input.value);
+    }
 
-function choisirManche(val) {
-  localStorage.setItem("mancheActive", val);
-}
-</script>
+    function ajouterPoint(block) {
+      const index = [...document.querySelectorAll('.team-block')].indexOf(block);
+      const id = "life" + (index + 1);
+      let val = parseInt(localStorage.getItem(id)) || 100;
+      val = Math.min(100, val + 10);
+      localStorage.setItem(id, val);
+    }
+
+    function retirerPoint(block) {
+      const index = [...document.querySelectorAll('.team-block')].indexOf(block);
+      const id = "life" + (index + 1);
+      let val = parseInt(localStorage.getItem(id)) || 100;
+      val = Math.max(0, val - 10);
+      localStorage.setItem(id, val);
+    }
+
+    function choisirManche(val) {
+      localStorage.setItem("mancheActive", val);
+    }
+  </script>
 </body>
 </html>
