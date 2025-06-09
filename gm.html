@@ -10,22 +10,23 @@
     .team-block { margin-bottom: 15px; background: #222; padding: 10px; border-radius: 8px; }
     .reset { margin-top: 30px; background-color: #c00; color: white; border: none; }
     .delete { background-color: #555; color: white; }
+    .vie { font-weight: bold; margin: 0 10px; }
+    .green { color: #4caf50; }
+    .orange { color: #ff9800; }
+    .red { color: #f44336; }
   </style>
 </head>
 <body>
   <h1>Interface Game Master 💔</h1>
 
-  <!-- ➕ AJOUT D’ÉQUIPE -->
   <section>
     <h2>Ajouter une équipe</h2>
     <input type="text" id="newTeamName" placeholder="Nom d'équipe">
     <button onclick="ajouterEquipe()">Ajouter</button>
   </section>
 
-  <!-- 👥 LISTE DES ÉQUIPES -->
   <section id="liste-equipes"></section>
 
-  <!-- 🎯 CHOIX DE LA MANCHE -->
   <section>
     <h2>Choisir une manche</h2>
     <select onchange="choisirManche(this.value)">
@@ -38,7 +39,6 @@
     </select>
   </section>
 
-  <!-- 🧹 RESET -->
   <section>
     <button class="reset" onclick="reinitialiser()">🧹 Recommencer la partie</button>
   </section>
@@ -47,66 +47,77 @@
     function chargerEquipesExistantes() {
       const container = document.getElementById("liste-equipes");
       container.innerHTML = "";
-
       let i = 1;
       while (localStorage.getItem(`team${i}name`)) {
         const name = localStorage.getItem(`team${i}name`);
-        const vie = localStorage.getItem(`life${i}`) || 100;
+        const vie = parseInt(localStorage.getItem(`life${i}`)) || 100;
         creerBlocEquipe(name, vie, i);
         i++;
       }
     }
 
-   function creerBlocEquipe(nom, vie = 100, index) {
-  const container = document.getElementById("liste-equipes");
-  const teamBlock = document.createElement("div");
-  teamBlock.className = "team-block";
-  teamBlock.dataset.index = index;
+    function creerBlocEquipe(nom, vie = 100, index) {
+      const container = document.getElementById("liste-equipes");
+      const teamBlock = document.createElement("div");
+      teamBlock.className = "team-block";
+      teamBlock.dataset.index = index;
 
-  const input = document.createElement("input");
-  input.type = "text";
-  input.value = nom;
-  input.onchange = () => {
-    localStorage.setItem(`team${index}name`, input.value);
-  };
+      const input = document.createElement("input");
+      input.type = "text";
+      input.value = nom;
+      input.onchange = () => {
+        localStorage.setItem(`team${index}name`, input.value);
+      };
 
-  const plusBtn = document.createElement("button");
-  plusBtn.textContent = "+1";
-  plusBtn.onclick = () => {
-    let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
-    val = Math.min(100, val + 10);
-    localStorage.setItem(`life${index}`, val);
-    mettreAJourAffichageVie(index);
-  };
+      const vieSpan = document.createElement("span");
+      vieSpan.id = `vieAffichee${index}`;
+      vieSpan.className = "vie";
+      mettreAJourAffichageVie(index, vieSpan);
 
-  const minusBtn = document.createElement("button");
-  minusBtn.textContent = "-1";
-  minusBtn.onclick = () => {
-    let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
-    val = Math.max(0, val - 10);
-    localStorage.setItem(`life${index}`, val);
-    mettreAJourAffichageVie(index);
-  };
+      const plusBtn = document.createElement("button");
+      plusBtn.textContent = "+1";
+      plusBtn.onclick = () => {
+        let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
+        val = Math.min(100, val + 10);
+        localStorage.setItem(`life${index}`, val);
+        mettreAJourAffichageVie(index, vieSpan);
+      };
 
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "🗑️ Supprimer";
-  deleteBtn.className = "delete";
-  deleteBtn.onclick = () => supprimerEquipe(index);
+      const minusBtn = document.createElement("button");
+      minusBtn.textContent = "-1";
+      minusBtn.onclick = () => {
+        let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
+        val = Math.max(0, val - 10);
+        localStorage.setItem(`life${index}`, val);
+        mettreAJourAffichageVie(index, vieSpan);
+      };
 
-  const vieAffichee = document.createElement("span");
-  vieAffichee.id = `affichageVie${index}`;
-  vieAffichee.className = "vie";
-  vieAffichee.textContent = ` ${vie}% `;
-  mettreAJourAffichageVie(index); // Mise à jour de la couleur
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑️ Supprimer";
+      deleteBtn.className = "delete";
+      deleteBtn.onclick = () => supprimerEquipe(index);
 
-  teamBlock.appendChild(input);
-  teamBlock.appendChild(vieAffichee);
-  teamBlock.appendChild(plusBtn);
-  teamBlock.appendChild(minusBtn);
-  teamBlock.appendChild(deleteBtn);
+      teamBlock.appendChild(input);
+      teamBlock.appendChild(vieSpan);
+      teamBlock.appendChild(plusBtn);
+      teamBlock.appendChild(minusBtn);
+      teamBlock.appendChild(deleteBtn);
 
-  container.appendChild(teamBlock);
-}
+      container.appendChild(teamBlock);
+    }
+
+    function mettreAJourAffichageVie(index, element) {
+      const val = parseInt(localStorage.getItem(`life${index}`)) || 0;
+      element.textContent = `${val}%`;
+      element.className = "vie";
+      if (val >= 70) {
+        element.classList.add("green");
+      } else if (val >= 30) {
+        element.classList.add("orange");
+      } else {
+        element.classList.add("red");
+      }
+    }
 
     function ajouterEquipe() {
       const name = document.getElementById("newTeamName").value.trim();
@@ -118,7 +129,6 @@
       localStorage.setItem(`team${i}name`, name);
       localStorage.setItem(`life${i}`, 100);
       creerBlocEquipe(name, 100, i);
-
       document.getElementById("newTeamName").value = "";
     }
 
@@ -126,29 +136,14 @@
       if (confirm("Supprimer cette équipe ?")) {
         localStorage.removeItem(`team${index}name`);
         localStorage.removeItem(`life${index}`);
-        location.reload();
+        chargerEquipesExistantes();
       }
     }
 
     function choisirManche(val) {
       localStorage.setItem("mancheActive", val);
     }
-function mettreAJourAffichageVie(index) {
-  const span = document.getElementById(`affichageVie${index}`);
-  if (span) {
-    const val = parseInt(localStorage.getItem(`life${index}`)) || 0;
-    span.textContent = ` ${val}% `;
-    span.className = "vie";
 
-    if (val >= 70) {
-      span.classList.add("green");
-    } else if (val >= 30) {
-      span.classList.add("orange");
-    } else {
-      span.classList.add("red");
-    }
-  }
-}
     function reinitialiser() {
       if (confirm("⚠️ Es-tu sûr de vouloir recommencer toute la partie ?")) {
         localStorage.clear();
