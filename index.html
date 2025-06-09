@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Quiz Party</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Battle Quiz 💔 CRÈVE-CŒUR </title>
 </head>
 <body>
-  <h1>Quiz Party</h1>
-  <div class="wheel-container">
-    <div id="wheel" onclick="spinWheel()">🎡 Cliquer pour tourner la roue</div>
-  </div>
-  <div id="jauges">
-    <div class="team" id="team1"><span>Équipe 1</span><div class="life-bar" id="life1"></div></div>
-    <div class="team" id="team2"><span>Équipe 2</span><div class="life-bar" id="life2"></div></div>
-  </div>
-  <script src="main.js"></script>
+  <h1>Battle Quiz 💔</h1>
+
+  <!-- 🎡 ROULETTE TYPE CAMEMBERT -->
+  <section id="roulette">
+    <h2>La Roue du Destin</h2>
+    <div id="camembert">
+      <div class="manche">Rencard ou Cauchemar</div>
+      <div class="manche">Blind Test Toxique</div>
+      <div class="manche">Cupidon Détraqué</div>
+      <div class="manche">Tentacule ou Tentation</div>
+      <div class="manche">Amours Impossibles</div>
+    </div>
+  </section>
+
+  <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
+  <section id="teams">
+    <!-- Exemples – remplis dynamiquement -->
+    <div class="team">
+      <h3 class="team-name">Team Passion</h3>
+      <div class="life-bar"><div class="life-fill" style="width:100%"></div></div>
+    </div>
+    <div class="team">
+      <h3 class="team-name">Les Cœurs Brisés</h3>
+      <div class="life-bar"><div class="life-fill" style="width:100%"></div></div>
+    </div>
+  </section>
+
+  <!-- 📺 ZONE DE JEU -->
+  <section id="jeu-actif" style="display: none;">
+    <h2>Jeu en cours : <span id="nom-manche"></span></h2>
+    <div id="contenu-jeu"></div>
+    <button onclick="retourAccueil()">Revenir à l’accueil</button>
+  </section>
+
 </body>
 </html>
