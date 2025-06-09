@@ -24,11 +24,17 @@
     </div>
   </section>
 
-  <!-- 🎡 LANCEMENT DE LA ROUE -->
-  <section>
-    <h2>Roue</h2>
-    <button onclick="lancerRoue()">Lancer la roue</button>
-    <p>Manche sélectionnée : <strong id="manche-tirée">Aucune</strong></p>
-  </section>
-</body>
-</html>
+ <select onchange="choisirManche(this.value)">
+  <option value="">Choisir une manche</option>
+  <option value="rencard">Rencard ou Cauchemar</option>
+  <option value="blindtest">Blind Test Toxique</option>
+  <option value="cupidon">Cupidon Détraqué</option>
+  <option value="tentacule">Tentacule ou Tentation</option>
+  <option value="impossible">Amours Impossibles</option>
+</select>
+
+<script>
+function choisirManche(val) {
+  localStorage.setItem("mancheActive", val);
+}
+</script>
