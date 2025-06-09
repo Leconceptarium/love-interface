@@ -81,12 +81,15 @@
     }
 
     function changerNom(input) {
-      const index = [...document.querySelectorAll('.team-block input')].indexOf(input);
-      localStorage.setItem(`team${index + 1}name`, input.value);
+      const allInputs = document.querySelectorAll('.team-block input[type="text"]');
+      const index = Array.from(allInputs).indexOf(input);
+      if (index >= 0) {
+        localStorage.setItem(`team${index + 1}name`, input.value);
+      }
     }
 
     function ajouterPoint(block) {
-      const index = [...document.querySelectorAll('.team-block')].indexOf(block);
+      const index = Array.from(document.querySelectorAll('.team-block')).indexOf(block);
       const id = "life" + (index + 1);
       let val = parseInt(localStorage.getItem(id)) || 100;
       val = Math.min(100, val + 10);
@@ -94,16 +97,15 @@
     }
 
     function retirerPoint(block) {
-      const index = [...document.querySelectorAll('.team-block')].indexOf(block);
+      const index = Array.from(document.querySelectorAll('.team-block')).indexOf(block);
       const id = "life" + (index + 1);
       let val = parseInt(localStorage.getItem(id)) || 100;
       val = Math.max(0, val - 10);
       localStorage.setItem(id, val);
     }
 
- function choisirManche(val) {
-  localStorage.setItem("mancheActive", val);
-}
+    function choisirManche(val) {
+      localStorage.setItem("mancheActive", val);
     }
   </script>
 </body>
