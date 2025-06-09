@@ -7,7 +7,9 @@
     body { font-family: sans-serif; background: #111; color: white; padding: 20px; }
     input[type="text"] { margin: 5px; padding: 5px; }
     button { margin: 5px; padding: 5px 10px; }
-    .team-block { margin-bottom: 15px; }
+    .team-block { margin-bottom: 15px; background: #222; padding: 10px; border-radius: 8px; }
+    .reset { margin-top: 30px; background-color: #c00; color: white; border: none; }
+    .delete { background-color: #555; color: white; }
   </style>
 </head>
 <body>
@@ -22,16 +24,7 @@
 
   <!-- 👥 LISTE DES ÉQUIPES -->
   <section id="liste-equipes">
-    <div class="team-block">
-      <input type="text" value="Team Passion" onchange="changerNom(this)">
-      <button onclick="ajouterPoint(this.parentElement)">+1</button>
-      <button onclick="retirerPoint(this.parentElement)">-1</button>
-    </div>
-    <div class="team-block">
-      <input type="text" value="Les Cœurs Brisés" onchange="changerNom(this)">
-      <button onclick="ajouterPoint(this.parentElement)">+1</button>
-      <button onclick="retirerPoint(this.parentElement)">-1</button>
-    </div>
+    <!-- Les équipes seront générées dynamiquement au chargement -->
   </section>
 
   <!-- 🎯 CHOIX DE LA MANCHE -->
@@ -47,23 +40,38 @@
     </select>
   </section>
 
-  <script>
-    function ajouterEquipe() {
-      const name = document.getElementById("newTeamName").value;
-      if (!name) return;
+  <!-- 🧹 RESET -->
+  <section>
+    <button class="reset" onclick="reinitialiser()">🧹 Recommencer la partie</button>
+  </section>
 
+  <script>
+    function chargerEquipesExistantes() {
+      const container = document.getElementById("liste-equipes");
+      container.innerHTML = "";
+
+      let i = 1;
+      while (localStorage.getItem(`team${i}name`)) {
+        const name = localStorage.getItem(`team${i}name`);
+        const vie = localStorage.getItem(`life${i}`) || 100;
+        creerBlocEquipe(name, vie, i);
+        i++;
+      }
+    }
+
+    function creerBlocEquipe(nom, vie = 100, index = null) {
+      const container = document.getElementById("liste-equipes");
       const teamBlock = document.createElement("div");
       teamBlock.className = "team-block";
 
-      const teamIndex = document.querySelectorAll(".team-block").length + 1;
+      const teamIndex = index || (document.querySelectorAll(".team-block").length + 1);
+
       const input = document.createElement("input");
       input.type = "text";
-      input.value = name;
+      input.value = nom;
       input.onchange = () => {
         localStorage.setItem(`team${teamIndex}name`, input.value);
       };
-      localStorage.setItem(`team${teamIndex}name`, name);
-      localStorage.setItem(`life${teamIndex}`, 100);
 
       const plusBtn = document.createElement("button");
       plusBtn.textContent = "+1";
@@ -73,11 +81,29 @@
       minusBtn.textContent = "-1";
       minusBtn.onclick = () => retirerPoint(teamBlock);
 
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑️ Supprimer";
+      deleteBtn.className = "delete";
+      deleteBtn.onclick = () => supprimerEquipe(teamIndex);
+
       teamBlock.appendChild(input);
       teamBlock.appendChild(plusBtn);
       teamBlock.appendChild(minusBtn);
+      teamBlock.appendChild(deleteBtn);
 
-      document.getElementById("liste-equipes").appendChild(teamBlock);
+      container.appendChild(teamBlock);
+    }
+
+    function ajouterEquipe() {
+      const name = document.getElementById("newTeamName").value;
+      if (!name) return;
+
+      const teamIndex = document.querySelectorAll(".team-block").length + 1;
+      localStorage.setItem(`team${teamIndex}name`, name);
+      localStorage.setItem(`life${teamIndex}`, 100);
+
+      creerBlocEquipe(name, 100, teamIndex);
+      document.getElementById("newTeamName").value = "";
     }
 
     function changerNom(input) {
@@ -104,9 +130,27 @@
       localStorage.setItem(id, val);
     }
 
+    function supprimerEquipe(index) {
+      if (confirm("Supprimer cette équipe ?")) {
+        localStorage.removeItem(`team${index}name`);
+        localStorage.removeItem(`life${index}`);
+        location.reload();
+      }
+    }
+
     function choisirManche(val) {
       localStorage.setItem("mancheActive", val);
     }
+
+    function reinitialiser() {
+      if (confirm("⚠️ Es-tu sûr de vouloir recommencer toute la partie ?")) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+
+    // Au chargement : on reconstruit tous les blocs existants
+    chargerEquipesExistantes();
   </script>
 </body>
 </html>
