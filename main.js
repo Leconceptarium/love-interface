@@ -16,4 +16,15 @@ function updateLifeBars() {
   });
 }
 
-window.onload = updateLifeBars;
+function updateJauges() {
+  document.querySelectorAll('.life-fill').forEach((bar, index) => {
+    const id = 'life' + (index + 1);
+    const value = localStorage.getItem(id) || 100;
+    bar.style.width = value + '%';
+  });
+}
+
+window.onload = () => {
+  updateLifeBars();
+  updateJauges();
+};
