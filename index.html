@@ -8,20 +8,11 @@
 <body>
   <h1>Battle Quiz 💔</h1>
 
-  <!-- 🎮 JEU WORDWALL DYNAMIQUE -->
-  <section id="jeu-wordwall">
-    <h2>💘 CRÈVE-CŒUR</h2>
-    <div class="wordwall-cover">
-     <iframe
-  src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0"
-  width="100%" height="300" style="border: none;" allowfullscreen>
-</iframe>
-    </div>
-  </section>
+  <!-- 🎮 JEU WORDWALL DYNAMIQUE (injecté via JavaScript) -->
+  <section id="jeu-wordwall"></section>
 
   <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
   <section id="jauges">
-    <!-- Les blocs d’équipes s’ajusteront automatiquement -->
     <div class="team">
       <h3 class="team-name">Équipe 1</h3>
       <div class="life-bar"><div class="life-fill" style="width:100%"></div></div>
@@ -39,7 +30,7 @@
     <button onclick="retourAccueil()">Revenir à l’accueil</button>
   </section>
 
-  <!-- 🔁 Script mise à jour dynamique -->
+  <!-- 🔁 Script de mise à jour dynamique -->
   <script>
     const urls = {
       cupidon: "https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0",
@@ -68,8 +59,9 @@
 
     function updateManche() {
       const val = localStorage.getItem("mancheActive");
+      const container = document.getElementById("jeu-wordwall");
       if (val && urls[val]) {
-        document.getElementById("jeu-wordwall").innerHTML = `
+        container.innerHTML = `
           <h2>💘 ${val.replace(/(^.|-)/g, s => s.toUpperCase())}</h2>
           <div class="wordwall-cover">
             <iframe class="wordwall-mask"
