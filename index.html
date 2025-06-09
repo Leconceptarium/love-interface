@@ -17,7 +17,7 @@
   <!-- 🔁 Script dynamique -->
   <script>
     const urls = {
-      cupidon: "https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0",
+      cupidon: "cupidon.html",
       rencard: "rencard.html",
       blindtest: "blindtest.html",
       tentacule: "tentacule.html",
@@ -111,7 +111,6 @@
     let previousTeamCount = 0;
 
     setInterval(() => {
-      // Compte le nombre d'équipes enregistrées
       let count = 0;
       while (localStorage.getItem(`team${count + 1}name`)) count++;
 
