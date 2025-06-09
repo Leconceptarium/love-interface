@@ -2,20 +2,33 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Game Master</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css">
+  <title>GM 💔 Amour Brisé</title>
 </head>
 <body>
-  <h2>Interface Game Master</h2>
-  <button onclick="addPoints('life1')">+1 Point Équipe 1</button>
-  <button onclick="addPoints('life2')">+1 Point Équipe 2</button>
-  <script>
-    function addPoints(id) {
-      const bar = localStorage.getItem(id) || 100;
-      const newVal = Math.min(100, parseInt(bar) + 10);
-      localStorage.setItem(id, newVal);
-    }
-  </script>
+  <h1>Interface Game Master 💔</h1>
+
+  <!-- ➕ AJOUT D’ÉQUIPE -->
+  <section>
+    <h2>Ajouter une équipe</h2>
+    <input type="text" id="newTeamName" placeholder="Nom d'équipe">
+    <button onclick="ajouterEquipe()">Ajouter</button>
+  </section>
+
+  <!-- 👥 LISTE DES ÉQUIPES -->
+  <section id="liste-equipes">
+    <!-- Remplie dynamiquement -->
+    <div class="team-block">
+      <input type="text" value="Team Passion" onchange="changerNom(this)">
+      <button onclick="ajouterPoint(this)">+1</button>
+      <button onclick="retirerPoint(this)">-1</button>
+    </div>
+  </section>
+
+  <!-- 🎡 LANCEMENT DE LA ROUE -->
+  <section>
+    <h2>Roue</h2>
+    <button onclick="lancerRoue()">Lancer la roue</button>
+    <p>Manche sélectionnée : <strong id="manche-tirée">Aucune</strong></p>
+  </section>
 </body>
 </html>
