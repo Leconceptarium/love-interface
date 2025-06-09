@@ -8,8 +8,10 @@
 <body>
   <h1>Battle Quiz 💔</h1>
 
-  <!-- 🎮 JEU WORDWALL DYNAMIQUE (injecté via JavaScript) -->
-  <section id="jeu-wordwall"></section>
+  <!-- 🎮 JEU WORDWALL DYNAMIQUE -->
+  <section id="jeu-wordwall">
+    <!-- Le contenu sera injecté dynamiquement -->
+  </section>
 
   <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
   <section id="jauges">
@@ -23,14 +25,14 @@
     </div>
   </section>
 
-  <!-- 📺 ZONE DE JEU (utilisable plus tard) -->
+  <!-- 📺 ZONE DE JEU (facultatif pour plus tard) -->
   <section id="jeu-actif" style="display: none;">
     <h2>Jeu en cours : <span id="nom-manche"></span></h2>
     <div id="contenu-jeu"></div>
     <button onclick="retourAccueil()">Revenir à l’accueil</button>
   </section>
 
-  <!-- 🔁 Script de mise à jour dynamique -->
+  <!-- 🔁 Script dynamique -->
   <script>
     const urls = {
       cupidon: "https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0",
@@ -62,7 +64,7 @@
       const container = document.getElementById("jeu-wordwall");
       if (val && urls[val]) {
         container.innerHTML = `
-          <h2>💘 ${val.replace(/(^.|-)/g, s => s.toUpperCase())}</h2>
+          <h2>💘 ${nomManche(val)}</h2>
           <div class="wordwall-cover">
             <iframe class="wordwall-mask"
               src="${urls[val]}"
@@ -72,6 +74,17 @@
           </div>
         `;
       }
+    }
+
+    function nomManche(code) {
+      const noms = {
+        cupidon: "Cupidon Détraqué",
+        rencard: "Rencard ou Cauchemar",
+        blindtest: "Blind Test Toxique",
+        tentacule: "Tentacule ou Tentation",
+        impossible: "Amours Impossibles"
+      };
+      return noms[code] || code;
     }
 
     function loopUpdate() {
