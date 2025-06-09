@@ -23,9 +23,7 @@
   </section>
 
   <!-- 👥 LISTE DES ÉQUIPES -->
-  <section id="liste-equipes">
-    <!-- Les équipes seront générées dynamiquement au chargement -->
-  </section>
+  <section id="liste-equipes"></section>
 
   <!-- 🎯 CHOIX DE LA MANCHE -->
   <section>
@@ -59,32 +57,39 @@
       }
     }
 
-    function creerBlocEquipe(nom, vie = 100, index = null) {
+    function creerBlocEquipe(nom, vie = 100, index) {
       const container = document.getElementById("liste-equipes");
       const teamBlock = document.createElement("div");
       teamBlock.className = "team-block";
-
-      const teamIndex = index || (document.querySelectorAll(".team-block").length + 1);
+      teamBlock.dataset.index = index;
 
       const input = document.createElement("input");
       input.type = "text";
       input.value = nom;
       input.onchange = () => {
-        localStorage.setItem(`team${teamIndex}name`, input.value);
+        localStorage.setItem(`team${index}name`, input.value);
       };
 
       const plusBtn = document.createElement("button");
       plusBtn.textContent = "+1";
-      plusBtn.onclick = () => ajouterPoint(teamBlock);
+      plusBtn.onclick = () => {
+        let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
+        val = Math.min(100, val + 10);
+        localStorage.setItem(`life${index}`, val);
+      };
 
       const minusBtn = document.createElement("button");
       minusBtn.textContent = "-1";
-      minusBtn.onclick = () => retirerPoint(teamBlock);
+      minusBtn.onclick = () => {
+        let val = parseInt(localStorage.getItem(`life${index}`)) || 100;
+        val = Math.max(0, val - 10);
+        localStorage.setItem(`life${index}`, val);
+      };
 
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "🗑️ Supprimer";
       deleteBtn.className = "delete";
-      deleteBtn.onclick = () => supprimerEquipe(teamIndex);
+      deleteBtn.onclick = () => supprimerEquipe(index);
 
       teamBlock.appendChild(input);
       teamBlock.appendChild(plusBtn);
@@ -95,39 +100,17 @@
     }
 
     function ajouterEquipe() {
-      const name = document.getElementById("newTeamName").value;
+      const name = document.getElementById("newTeamName").value.trim();
       if (!name) return;
 
-      const teamIndex = document.querySelectorAll(".team-block").length + 1;
-      localStorage.setItem(`team${teamIndex}name`, name);
-      localStorage.setItem(`life${teamIndex}`, 100);
+      let i = 1;
+      while (localStorage.getItem(`team${i}name`)) i++;
 
-      creerBlocEquipe(name, 100, teamIndex);
+      localStorage.setItem(`team${i}name`, name);
+      localStorage.setItem(`life${i}`, 100);
+      creerBlocEquipe(name, 100, i);
+
       document.getElementById("newTeamName").value = "";
-    }
-
-    function changerNom(input) {
-      const allInputs = document.querySelectorAll('.team-block input[type="text"]');
-      const index = Array.from(allInputs).indexOf(input);
-      if (index >= 0) {
-        localStorage.setItem(`team${index + 1}name`, input.value);
-      }
-    }
-
-    function ajouterPoint(block) {
-      const index = Array.from(document.querySelectorAll('.team-block')).indexOf(block);
-      const id = "life" + (index + 1);
-      let val = parseInt(localStorage.getItem(id)) || 100;
-      val = Math.min(100, val + 10);
-      localStorage.setItem(id, val);
-    }
-
-    function retirerPoint(block) {
-      const index = Array.from(document.querySelectorAll('.team-block')).indexOf(block);
-      const id = "life" + (index + 1);
-      let val = parseInt(localStorage.getItem(id)) || 100;
-      val = Math.max(0, val - 10);
-      localStorage.setItem(id, val);
     }
 
     function supprimerEquipe(index) {
@@ -149,7 +132,6 @@
       }
     }
 
-    // Au chargement : on reconstruit tous les blocs existants
     chargerEquipesExistantes();
   </script>
 </body>
