@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Master</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Interface Game Master</h2>
+  <button onclick="addPoints('life1')">+1 Point Équipe 1</button>
+  <button onclick="addPoints('life2')">+1 Point Équipe 2</button>
+  <script>
+    function addPoints(id) {
+      const bar = localStorage.getItem(id) || 100;
+      const newVal = Math.min(100, parseInt(bar) + 10);
+      localStorage.setItem(id, newVal);
+    }
+  </script>
+</body>
+</html>
