@@ -8,7 +8,7 @@
 <body>
   <h1>Battle Quiz 💔</h1>
 
-  <!-- 🎮 JEU D'ACCUEIL WORDWALL : Cupidon Détraqué -->
+  <!-- 🎮 JEU WORDWALL DYNAMIQUE -->
   <section id="jeu-wordwall">
     <h2>💘 CRÈVE-CŒUR</h2>
     <div class="wordwall-cover">
@@ -24,21 +24,74 @@
 
   <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
   <section id="jauges">
+    <!-- Les blocs d’équipes s’ajusteront automatiquement -->
     <div class="team">
-      <h3 class="team-name">Team Passion</h3>
+      <h3 class="team-name">Équipe 1</h3>
       <div class="life-bar"><div class="life-fill" style="width:100%"></div></div>
     </div>
     <div class="team">
-      <h3 class="team-name">Les Cœurs Brisés</h3>
+      <h3 class="team-name">Équipe 2</h3>
       <div class="life-bar"><div class="life-fill" style="width:100%"></div></div>
     </div>
   </section>
 
-  <!-- 📺 ZONE DE JEU -->
+  <!-- 📺 ZONE DE JEU (utilisable plus tard) -->
   <section id="jeu-actif" style="display: none;">
     <h2>Jeu en cours : <span id="nom-manche"></span></h2>
     <div id="contenu-jeu"></div>
     <button onclick="retourAccueil()">Revenir à l’accueil</button>
   </section>
+
+  <!-- 🔁 Script mise à jour dynamique -->
+  <script>
+    const urls = {
+      cupidon: "https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0",
+      rencard: "https://wordwall.net/fr/embed/ID2",
+      blindtest: "https://wordwall.net/fr/embed/ID3",
+      tentacule: "https://wordwall.net/fr/embed/ID4",
+      impossible: "https://wordwall.net/fr/embed/ID5"
+    };
+
+    function updateJauges() {
+      const fills = document.querySelectorAll('.life-fill');
+      fills.forEach((bar, index) => {
+        const id = 'life' + (index + 1);
+        const val = localStorage.getItem(id) || 100;
+        bar.style.width = val + '%';
+      });
+    }
+
+    function updateTeamNames() {
+      const names = document.querySelectorAll('.team-name');
+      names.forEach((el, i) => {
+        const name = localStorage.getItem(`team${i + 1}name`);
+        if (name) el.textContent = name;
+      });
+    }
+
+    function updateManche() {
+      const val = localStorage.getItem("mancheActive");
+      if (val && urls[val]) {
+        document.getElementById("jeu-wordwall").innerHTML = `
+          <h2>💘 ${val.replace(/(^.|-)/g, s => s.toUpperCase())}</h2>
+          <div class="wordwall-cover">
+            <iframe class="wordwall-mask"
+              src="${urls[val]}"
+              width="100%" height="300"
+              style="border:none;" allowfullscreen>
+            </iframe>
+          </div>
+        `;
+      }
+    }
+
+    function loopUpdate() {
+      updateJauges();
+      updateTeamNames();
+      updateManche();
+    }
+
+    setInterval(loopUpdate, 1000);
+  </script>
 </body>
 </html>
