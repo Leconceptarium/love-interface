@@ -11,11 +11,14 @@
   <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
   <section id="jauges"></section>
 
- <!-- 🎯 JEU PAR DÉFAUT EN PAGE D’ACCUEIL -->
+  <!-- 🎯 JEU PAR DÉFAUT EN PAGE D’ACCUEIL -->
   <section>
     <iframe style="max-width:100%" src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0" width="500" height="380" frameborder="0" allowfullscreen></iframe>
   </section>
-  
+
+  <!-- 🎮 JEU SELECTIONNÉ -->
+  <section id="jeu-wordwall"></section>
+
   <!-- 🔁 Script dynamique -->
   <script>
     const urls = {
@@ -109,14 +112,12 @@
       }
     }
 
-    // 🔁 Boucle qui reconstruit les jauges si une équipe a été ajoutée
-    let previousTeamCount = 0;
-
-   setInterval(() => {
-  construireEquipes();  // Toujours reconstruire à chaque tick
-  updateJauges();
-  updateManche();
-}, 1000);
+    // 🔁 Rafraîchit toutes les données à intervalle fixe
+    setInterval(() => {
+      construireEquipes();
+      updateJauges();
+      updateManche();
+    }, 1000);
   </script>
 </body>
 </html>
