@@ -17,7 +17,7 @@ h1, h2 { margin-top: 20px; }
   background-color: red;
   transition: width 0.3s ease;
   animation: heartbeat 3.5s infinite;
-  border-radius: 10px;
+  border-radius: 250px;
 }
 @keyframes heartbeat {
   0%, 100% {
