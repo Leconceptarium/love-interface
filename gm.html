@@ -34,7 +34,48 @@
 </select>
 
 <script>
+function ajouterEquipe() {
+  const name = document.getElementById("newTeamName").value;
+  if (!name) return;
+
+  const teamBlock = document.createElement("div");
+  teamBlock.className = "team-block";
+
+  teamBlock.innerHTML = `
+    <input type="text" value="${name}" onchange="changerNom(this)">
+    <button onclick="ajouterPoint(this)">+1</button>
+    <button onclick="retirerPoint(this)">-1</button>
+  `;
+
+  document.getElementById("liste-equipes").appendChild(teamBlock);
+
+  const id = "life" + (document.querySelectorAll('.team-block').length);
+  localStorage.setItem(id, 100);
+}
+
+function changerNom(input) {
+  // facultatif : enregistrer le nom dans le localStorage si tu veux
+}
+
+function ajouterPoint(btn) {
+  const index = Array.from(document.querySelectorAll('.team-block')).indexOf(btn.parentElement);
+  const id = "life" + (index + 1);
+  let val = parseInt(localStorage.getItem(id)) || 100;
+  val = Math.min(100, val + 10);
+  localStorage.setItem(id, val);
+}
+
+function retirerPoint(btn) {
+  const index = Array.from(document.querySelectorAll('.team-block')).indexOf(btn.parentElement);
+  const id = "life" + (index + 1);
+  let val = parseInt(localStorage.getItem(id)) || 100;
+  val = Math.max(0, val - 10);
+  localStorage.setItem(id, val);
+}
+
 function choisirManche(val) {
   localStorage.setItem("mancheActive", val);
 }
 </script>
+</body>
+</html>
