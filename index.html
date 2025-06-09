@@ -8,108 +8,111 @@
 <body>
   <h1>Battle Quiz 💔</h1>
 
-  <!-- 🎮 JEU WORDWALL DYNAMIQUE -->
-
-    <!-- Le contenu sera injecté dynamiquement -->
-  </section>
-  <iframe style="max-width:100%" src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0" width="500" height="380" frameborder="0" allowfullscreen></iframe>
-  
   <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
-  <section id="jauges">
-    <div class="team">
-      <h3 class="team-name">Équipe 1</h3>
-      <div class="life-bar"><div class="life-fill" style="width:100%"></div></div>
-    </div>
-    <div class="team">
-      <h3 class="team-name">Équipe 2</h3>
-      <div class="life-bar"><div class="life-fill" style="width:100%"></div></div>
-    </div>
-  </section>
+  <section id="jauges"></section>
 
-  <!-- 📺 ZONE DE JEU (facultatif pour plus tard) -->
-  <section id="jeu-actif" style="display: none;">
-    <h2>Jeu en cours : <span id="nom-manche"></span></h2>
-    <div id="contenu-jeu"></div>
-    <button onclick="retourAccueil()">Revenir à l’accueil</button>
-  </section>
+  <!-- 🎮 JEU WORDWALL OU HTML -->
+  <section id="jeu-wordwall"></section>
 
   <!-- 🔁 Script dynamique -->
   <script>
-   const urls = {
-  cupidon: "cupidon.html",
-  rencard: "rencard.html",
-  blindtest: "blindtest.html",
-  tentacule: "tentacule.html",
-  impossible: "impossible.html"
-};
-  
+    const urls = {
+      cupidon: "https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0",
+      rencard: "rencard.html",
+      blindtest: "blindtest.html",
+      tentacule: "tentacule.html",
+      impossible: "impossible.html"
+    };
+
+    function construireEquipes() {
+      const container = document.getElementById("jauges");
+      container.innerHTML = "";
+
+      let i = 1;
+      while (localStorage.getItem(`team${i}name`)) {
+        const nom = localStorage.getItem(`team${i}name`);
+        const vie = localStorage.getItem(`life${i}`) || 100;
+
+        const teamDiv = document.createElement("div");
+        teamDiv.className = "team";
+
+        const titre = document.createElement("h3");
+        titre.className = "team-name";
+        titre.textContent = nom;
+
+        const barre = document.createElement("div");
+        barre.className = "life-bar";
+
+        const fill = document.createElement("div");
+        fill.className = "life-fill";
+        fill.style.width = vie + "%";
+        fill.id = "life" + i;
+
+        barre.appendChild(fill);
+        teamDiv.appendChild(titre);
+        teamDiv.appendChild(barre);
+        container.appendChild(teamDiv);
+
+        i++;
+      }
+    }
 
     function updateJauges() {
-      const fills = document.querySelectorAll('.life-fill');
-      fills.forEach((bar, index) => {
-        const id = 'life' + (index + 1);
-        const val = localStorage.getItem(id) || 100;
-        bar.style.width = val + '%';
-      });
+      let i = 1;
+      while (document.getElementById("life" + i)) {
+        const val = localStorage.getItem("life" + i) || 100;
+        const fill = document.getElementById("life" + i);
+        fill.style.width = val + "%";
+
+        const name = localStorage.getItem(`team${i}name`);
+        const titre = fill.parentElement.previousSibling;
+        if (name) titre.textContent = name;
+
+        i++;
+      }
     }
 
-    function updateTeamNames() {
-      const names = document.querySelectorAll('.team-name');
-      names.forEach((el, i) => {
-        const name = localStorage.getItem(`team${i + 1}name`);
-        if (name) el.textContent = name;
-      });
+    function updateManche() {
+      const val = localStorage.getItem("mancheActive");
+      const container = document.getElementById("jeu-wordwall");
+
+      if (val) {
+        const nom = {
+          cupidon: "Cupidon Détraqué",
+          rencard: "Rencard ou Cauchemar",
+          blindtest: "Blind Test Toxique",
+          tentacule: "Tentacule ou Tentation",
+          impossible: "Amours Impossibles"
+        }[val];
+
+        let content = `<h2>${nom}</h2>`;
+        if (val === "cupidon") {
+          content += `
+            <div class="wordwall-cover">
+              <iframe class="wordwall-mask"
+                src="${urls[val]}"
+                width="100%" height="380"
+                style="border:none;" allowfullscreen>
+              </iframe>
+            </div>
+          `;
+        } else {
+          content += `
+            <iframe src="${urls[val]}" width="100%" height="500" style="border:none;"></iframe>
+          `;
+        }
+        container.innerHTML = content;
+      } else {
+        container.innerHTML = "";
+      }
     }
 
-   function updateManche() {
-  const val = localStorage.getItem("mancheActive");
-  const container = document.getElementById("jeu-wordwall");
-
-  if (val) {
-    // Si c’est Cupidon → garder l’iframe Wordwall
-    if (val === "cupidon") {
-      container.innerHTML = `
-        <h2>💘 ${nomManche(val)}</h2>
-        <div class="wordwall-cover">
-          <iframe class="wordwall-mask"
-            src="${urls[val]}"
-            width="100%" height="300"
-            style="border:none;" allowfullscreen>
-          </iframe>
-        </div>
-      `;
-    } else if (urls[val]) {
-      // Sinon → charger ta page HTML locale dans une iframe
-      container.innerHTML = `
-        <h2>🎮 ${nomManche(val)}</h2>
-        <iframe
-          src="${urls[val]}"
-          width="100%" height="500"
-          style="border:none;">
-        </iframe>
-      `;
-    }
-  }
-}
-
-    function nomManche(code) {
-      const noms = {
-        cupidon: "Cupidon Détraqué",
-        rencard: "Rencard ou Cauchemar",
-        blindtest: "Blind Test Toxique",
-        tentacule: "Tentacule ou Tentation",
-        impossible: "Amours Impossibles"
-      };
-      return noms[code] || code;
-    }
-
-    function loopUpdate() {
+    // Initialisation + boucle continue
+    construireEquipes();
+    setInterval(() => {
       updateJauges();
-      updateTeamNames();
       updateManche();
-    }
-
-    setInterval(loopUpdate, 1000);
+    }, 1000);
   </script>
 </body>
 </html>
