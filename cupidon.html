@@ -2,10 +2,101 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Jeu 4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Des titres de films vous sont proposés. À vous de deviner s’il s’agit d’une vraie comédie romantique… ou d’une pure invention sortie de l’esprit d’un Cupidon devenu fou.</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fbeaec;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .slide {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    .active {
+      display: block;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #d33682;
+    }
+    .title {
+      font-size: 2rem;
+      color: #333;
+      margin: 2rem 0;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      background-color: #d33682;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #b1236c;
+    }
+  </style>
 </head>
-<body style="background:#f8f8f8;text-align:center;padding:50px">
-  <h1>Des titres de films vous sont proposés. À vous de deviner s’il s’agit d’une vraie comédie romantique… ou d’une pure invention sortie de l’esprit d’un Cupidon devenu fou.</h1>
-  <button onclick="window.parent.location.href='index.html'">Fin du jeu</button>
+<body>
+  <div id="slides">
+    <div class="slide active">
+      <h1>Cupidon Détraqué</h1>
+      <div class="title">Vrai film romantique ou invention totale ?</div>
+      <button onclick="nextSlide()">Commencer</button>
+    </div>
+    <div class="slide"><div class="title">L’Amour entre deux tranches de pain</div></div>
+    <div class="slide"><div class="title">Un Jour sans Elle</div></div>
+    <div class="slide"><div class="title">Le Béguin du Viking</div></div>
+    <div class="slide"><div class="title">The Notebook</div></div>
+    <div class="slide"><div class="title">Amour, Menteurs et Pizzas</div></div>
+    <div class="slide"><div class="title">Call Me by Your Name</div></div>
+    <div class="slide"><div class="title">La Vie Secrète des Ex</div></div>
+    <div class="slide"><div class="title">Eternal Sunshine of the Spotless Mind</div></div>
+    <div class="slide"><div class="title">Lettre à mon Poisson Rouge</div></div>
+    <div class="slide"><div class="title">27 Robes</div></div>
+    <div class="slide"><div class="title">Le Fantôme de mon Crush</div></div>
+    <div class="slide"><div class="title">Coup de foudre à la gendarmerie</div></div>
+    <div class="slide"><div class="title">50 First Dates</div></div>
+    <div class="slide"><div class="title">Ton cœur est dans ma boîte mail</div></div>
+    <div class="slide"><div class="title">Titanic 2 : Le Retour du Cœur</div></div>
+    <div class="slide"><div class="title">Nos Étoiles Contraires</div></div>
+    <div class="slide"><div class="title">À l’Ombre des Cupcakes</div></div>
+    <div class="slide"><div class="title">Elle & Lui & son ex</div></div>
+    <div class="slide"><div class="title">Sur la route de l’amour (et du diesel)</div></div>
+    <div class="slide"><div class="title">Un prince presque charmant</div></div>
+    <div class="slide">
+      <div class="title">Fin du jeu ! Merci d’avoir joué 💔</div>
+    </div>
+  </div>
+
+  <script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+
+    function nextSlide() {
+      if (current < slides.length - 1) {
+        slides[current].classList.remove('active');
+        current++;
+        slides[current].classList.add('active');
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        nextSlide();
+      }
+    });
+  </script>
 </body>
 </html>
+
