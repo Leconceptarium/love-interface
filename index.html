@@ -8,54 +8,69 @@
     body {
       font-family: 'Rubik', sans-serif;
       text-align: center;
-      background: url('https://www.transparenttextures.com/patterns/aged-paper.png') repeat;
-      color: #4b2e2e;
+      background: linear-gradient(180deg, #1a0f14, #0e0e0e);
+      color: #fff;
       margin: 0;
       padding: 30px;
+      overflow-x: hidden;
+      position: relative;
     }
 
     h1 {
       font-family: 'Great Vibes', cursive;
       font-size: 3.2rem;
-      color: #922d2d;
-      text-shadow: 1px 1px #fff2;
+      color: #ff4d6d;
+      text-shadow: 0 0 8px #ff4d6d88;
       margin-bottom: 30px;
     }
 
     h2 {
       font-size: 1.8rem;
       margin-top: 40px;
-      color: #6c1f1f;
+      color: #ff95a5;
+      text-shadow: 0 0 6px #ff4d6d55;
     }
 
     .team {
       width: 40%;
-      background: rgba(255, 245, 230, 0.8);
+      background: #1c1c1c;
       padding: 15px;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(120, 60, 40, 0.2);
+      box-shadow: 0 0 10px #0008;
       margin: 10px auto;
     }
 
     .team-name {
       font-size: 1.2em;
       margin-bottom: 10px;
-      color: #7c2a2a;
+      color: #ff95a5;
     }
 
     .life-bar {
       width: 100%;
-      height: 30px;
-      background-color: #d8c4aa;
-      border-radius: 15px;
+      height: 35px;
+      background-color: #333;
+      border-radius: 20px;
       overflow: hidden;
     }
 
     .life-fill {
       height: 100%;
-      background: linear-gradient(90deg, #e74c3c, #e59866);
+      background: linear-gradient(90deg, #ff4d6d, #ff95a5);
       transition: width 0.3s ease;
-      border-radius: 15px;
+      animation: heartbeat 3.5s infinite;
+      border-radius: 250px;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 77, 109, 0.8);
+      }
     }
 
     .wordwall-container {
@@ -64,7 +79,7 @@
       margin: 40px auto;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 0 25px rgba(139, 69, 19, 0.2);
+      box-shadow: 0 0 25px rgba(255, 77, 109, 0.2);
     }
 
     .wordwall-container iframe {
@@ -80,13 +95,8 @@
       left: 0;
       width: 100%;
       height: 40px;
-      background: linear-gradient(to top, #fff8e1 80%, transparent);
+      background: linear-gradient(to top, #0e0e0e 80%, transparent);
       pointer-events: none;
-    }
-
-    .wordwall-cover {
-      max-width: 100%;
-      margin-top: 20px;
     }
 
     iframe {
@@ -177,20 +187,22 @@
       const val = localStorage.getItem("mancheActive");
       const container = document.getElementById("jeu-wordwall");
 
-      if (val) {
+      if (val && urls[val]) {
         const nom = {
-          cupidon: "Cupidon Détraqué",
-          rencard: "Rencard ou Cauchemar",
-          blindtest: "Blind Test Toxique",
-          tentacule: "Tentacule ou Tentation",
-          impossible: "Amours Impossibles"
+          cupidon: "💘 Cupidon Détraqué",
+          rencard: "🎭 Rencard ou Cauchemar",
+          blindtest: "🎶 Blind Test Toxique",
+          tentacule: "🐙 Tentacule ou Tentation",
+          impossible: "💔 Amours Impossibles"
         }[val];
 
-        let content = `<h2>${nom}</h2>`;
-        content += `
-          <iframe src="${urls[val]}" width="100%" height="500" style="border:none;"></iframe>
+        container.innerHTML = `
+          <h2>${nom}</h2>
+          <div class="wordwall-container">
+            <iframe src="${urls[val]}" allowfullscreen></iframe>
+            <div class="mask-wordwall"></div>
+          </div>
         `;
-        container.innerHTML = content;
       } else {
         container.innerHTML = "";
       }
