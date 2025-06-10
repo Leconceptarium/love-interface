@@ -208,11 +208,12 @@
       }
     }
 
-    setInterval(() => {
-      construireEquipes();
-      updateJauges();
-      updateManche();
-    }, 1000);
+  construireEquipes();
+updateJauges();
+updateManche();
+setInterval(() => {
+  updateJauges();
+}, 1000);
   </script>
 </body>
 </html>
