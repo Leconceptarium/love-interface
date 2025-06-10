@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Des titres de films vous sont proposés. À vous de deviner s’il s’agit d’une vraie comédie romantique… ou d’une pure invention sortie de l’esprit d’un Cupidon devenu fou.</title>
+  <title>Cupidon Détraqué - Battle Quizz</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
@@ -33,6 +33,23 @@
       color: #333;
       margin: 2rem 0;
     }
+    .answer {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      color: #00703c;
+      display: none;
+    }
+    .reveal {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
     button {
       padding: 1rem 2rem;
       font-size: 1rem;
@@ -42,44 +59,67 @@
       border-radius: 5px;
       cursor: pointer;
     }
-    button:hover {
+    button:hover, .reveal:hover {
       background-color: #b1236c;
     }
   </style>
 </head>
 <body>
   <div id="slides">
-    <div class="slide active">
-      <h1>Cupidon Détraqué</h1>
-      <div class="title">Vrai film romantique ou invention totale ?</div>
-      <button onclick="nextSlide()">Commencer</button>
-    </div>
-    <div class="slide"><div class="title">L’Amour entre deux tranches de pain</div></div>
-    <div class="slide"><div class="title">Un Jour sans Elle</div></div>
-    <div class="slide"><div class="title">Le Béguin du Viking</div></div>
-    <div class="slide"><div class="title">The Notebook</div></div>
-    <div class="slide"><div class="title">Amour, Menteurs et Pizzas</div></div>
-    <div class="slide"><div class="title">Call Me by Your Name</div></div>
-    <div class="slide"><div class="title">La Vie Secrète des Ex</div></div>
-    <div class="slide"><div class="title">Eternal Sunshine of the Spotless Mind</div></div>
-    <div class="slide"><div class="title">Lettre à mon Poisson Rouge</div></div>
-    <div class="slide"><div class="title">27 Robes</div></div>
-    <div class="slide"><div class="title">Le Fantôme de mon Crush</div></div>
-    <div class="slide"><div class="title">Coup de foudre à la gendarmerie</div></div>
-    <div class="slide"><div class="title">50 First Dates</div></div>
-    <div class="slide"><div class="title">Ton cœur est dans ma boîte mail</div></div>
-    <div class="slide"><div class="title">Titanic 2 : Le Retour du Cœur</div></div>
-    <div class="slide"><div class="title">Nos Étoiles Contraires</div></div>
-    <div class="slide"><div class="title">À l’Ombre des Cupcakes</div></div>
-    <div class="slide"><div class="title">Elle & Lui & son ex</div></div>
-    <div class="slide"><div class="title">Sur la route de l’amour (et du diesel)</div></div>
-    <div class="slide"><div class="title">Un prince presque charmant</div></div>
-    <div class="slide">
-      <div class="title">Fin du jeu ! Merci d’avoir joué 💔</div>
-    </div>
+    <!-- Slides will be populated with JavaScript -->
   </div>
 
   <script>
+    const filmData = [
+      { title: "L’Amour entre deux tranches de pain", answer: "Faux" },
+      { title: "Un Jour sans Elle", answer: "Faux" },
+      { title: "Le Béguin du Viking", answer: "Faux" },
+      { title: "The Notebook", answer: "Vrai" },
+      { title: "Amour, Menteurs et Pizzas", answer: "Faux" },
+      { title: "Call Me by Your Name", answer: "Vrai" },
+      { title: "La Vie Secrète des Ex", answer: "Faux" },
+      { title: "Eternal Sunshine of the Spotless Mind", answer: "Vrai" },
+      { title: "Lettre à mon Poisson Rouge", answer: "Faux" },
+      { title: "27 Robes", answer: "Vrai" },
+      { title: "Le Fantôme de mon Crush", answer: "Faux" },
+      { title: "Coup de foudre à la gendarmerie", answer: "Faux" },
+      { title: "50 First Dates", answer: "Vrai" },
+      { title: "Ton cœur est dans ma boîte mail", answer: "Vrai" },
+      { title: "Titanic 2 : Le Retour du Cœur", answer: "Faux" },
+      { title: "Nos Étoiles Contraires", answer: "Vrai" },
+      { title: "À l’Ombre des Cupcakes", answer: "Faux" },
+      { title: "Elle & Lui & son ex", answer: "Faux" },
+      { title: "Sur la route de l’amour (et du diesel)", answer: "Faux" },
+      { title: "Un prince presque charmant", answer: "Vrai" }
+    ];
+
+    const slidesContainer = document.getElementById('slides');
+
+    const introSlide = document.createElement('div');
+    introSlide.classList.add('slide', 'active');
+    introSlide.innerHTML = `
+      <h1>Cupidon Détraqué</h1>
+      <div class="title">Vrai film romantique ou invention totale ?</div>
+      <button onclick="nextSlide()">Commencer</button>
+    `;
+    slidesContainer.appendChild(introSlide);
+
+    filmData.forEach(film => {
+      const slide = document.createElement('div');
+      slide.classList.add('slide');
+      slide.innerHTML = `
+        <div class="title">${film.title}</div>
+        <div class="answer">Réponse : ${film.answer}</div>
+        <button class="reveal" onclick="this.previousElementSibling.style.display='block'">Afficher la réponse</button>
+      `;
+      slidesContainer.appendChild(slide);
+    });
+
+    const finalSlide = document.createElement('div');
+    finalSlide.classList.add('slide');
+    finalSlide.innerHTML = `<div class="title">Fin du jeu ! Merci d’avoir joué 💔</div>`;
+    slidesContainer.appendChild(finalSlide);
+
     let current = 0;
     const slides = document.querySelectorAll('.slide');
 
@@ -99,4 +139,3 @@
   </script>
 </body>
 </html>
-
