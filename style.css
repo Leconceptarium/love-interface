@@ -1,18 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Great+Vibes&display=swap');
 
 body {
   font-family: 'Rubik', sans-serif;
   text-align: center;
-  background: #0e0e0e;
+  background: linear-gradient(180deg, #1a0f14, #0e0e0e);
   color: #fff;
   margin: 0;
   padding: 20px;
+  position: relative;
+  overflow-x: hidden;
 }
 
-h1, h2 {
+body::before {
+  content: "💖";
+  font-size: 2rem;
+  position: fixed;
+  animation: float 5s linear infinite;
+  opacity: 0.05;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+@keyframes float {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -60%) scale(1.2); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+h1 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 3rem;
+  color: #ff4d6d;
+  text-shadow: 0 0 8px #ff4d6d88;
   margin-top: 20px;
+}
+
+h2 {
+  font-family: 'Rubik', sans-serif;
   color: #ff4d6d;
   text-shadow: 0 0 5px #ff4d6d66;
+  margin-top: 20px;
 }
 
 .wheel-container {
@@ -84,4 +113,20 @@ h1, h2 {
     transform: scale(1.05);
     box-shadow: 0 0 25px rgba(255, 77, 109, 0.8);
   }
+}
+
+button {
+  background: #ff4d6d;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin: 5px;
+}
+
+button:hover {
+  background: #ff6e8c;
 }
