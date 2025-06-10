@@ -126,97 +126,96 @@
   <section id="jeu-wordwall"></section>
 
   <!-- 🔁 Script dynamique -->
-  <script>
-    const urls = {
-      cupidon: "cupidon.html",
-      rencard: "rencard.html",
-      blindtest: "blindtest.html",
-      tentacule: "tentacule.html",
-      impossible: "impossible.html"
-    };
+ <script>
+  const urls = {
+    cupidon: "cupidon.html",
+    rencard: "rencard.html",
+    blindtest: "blindtest.html",
+    tentacule: "tentacule.html",
+    impossible: "impossible.html"
+  };
 
-    function construireEquipes() {
-      const container = document.getElementById("jauges");
-      container.innerHTML = "";
+  function construireEquipes() {
+    const container = document.getElementById("jauges");
+    container.innerHTML = "";
 
-      let i = 1;
-      while (localStorage.getItem(team${i}name)) {
-        const nom = localStorage.getItem(team${i}name);
-        const vie = localStorage.getItem(life${i}) || 100;
+    let i = 1;
+    while (localStorage.getItem(`team${i}name`)) {
+      const nom = localStorage.getItem(`team${i}name`);
+      const vie = localStorage.getItem(`life${i}`) || 100;
 
-        const teamDiv = document.createElement("div");
-        teamDiv.className = "team";
+      const teamDiv = document.createElement("div");
+      teamDiv.className = "team";
 
-        const titre = document.createElement("h3");
-        titre.className = "team-name";
-        titre.textContent = nom;
+      const titre = document.createElement("h3");
+      titre.className = "team-name";
+      titre.textContent = nom;
 
-        const barre = document.createElement("div");
-        barre.className = "life-bar";
+      const barre = document.createElement("div");
+      barre.className = "life-bar";
 
-        const fill = document.createElement("div");
-        fill.className = "life-fill";
-        fill.style.width = vie + "%";
-        fill.id = "life" + i;
+      const fill = document.createElement("div");
+      fill.className = "life-fill";
+      fill.style.width = vie + "%";
+      fill.id = "life" + i;
 
-        barre.appendChild(fill);
-        teamDiv.appendChild(titre);
-        teamDiv.appendChild(barre);
-        container.appendChild(teamDiv);
+      barre.appendChild(fill);
+      teamDiv.appendChild(titre);
+      teamDiv.appendChild(barre);
+      container.appendChild(teamDiv);
 
-        i++;
-      }
+      i++;
     }
+  }
 
-    function updateJauges() {
-      let i = 1;
-      while (document.getElementById("life" + i)) {
-        const val = localStorage.getItem("life" + i) || 100;
-        const fill = document.getElementById("life" + i);
-        fill.style.width = val + "%";
+  function updateJauges() {
+    let i = 1;
+    while (document.getElementById("life" + i)) {
+      const val = localStorage.getItem("life" + i) || 100;
+      const fill = document.getElementById("life" + i);
+      fill.style.width = val + "%";
 
-        const name = localStorage.getItem(team${i}name);
-        const titre = fill.parentElement.previousSibling;
-        if (name) titre.textContent = name;
+      const name = localStorage.getItem(`team${i}name`);
+      const titre = fill.parentElement.previousSibling;
+      if (name) titre.textContent = name;
 
-        i++;
-      }
+      i++;
     }
+  }
 
-   function updateSlideEtReponse() {
-  const val = localStorage.getItem("mancheActive");
-  const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
-  const show = localStorage.getItem("showAnswer") === "true";
+  function updateSlideEtReponse() {
+    const val = localStorage.getItem("mancheActive");
+    const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
+    const show = localStorage.getItem("reveal") === "true";
 
-  const container = document.getElementById("jeu-wordwall");
-  if (!val || !urls[val]) return;
+    const container = document.getElementById("jeu-wordwall");
+    if (!val || !urls[val]) return;
 
-  const nom = {
-    cupidon: "💘 Cupidon Détraqué",
-    rencard: "🎭 Rencard ou Cauchemar",
-    blindtest: "🎶 Blind Test Toxique",
-    tentacule: "🐙 Tentacule ou Tentation",
-    impossible: "💔 Amours Impossibles"
-  }[val];
+    const nom = {
+      cupidon: "💘 Cupidon Détraqué",
+      rencard: "🎭 Rencard ou Cauchemar",
+      blindtest: "🎶 Blind Test Toxique",
+      tentacule: "🐙 Tentacule ou Tentation",
+      impossible: "💔 Amours Impossibles"
+    }[val];
 
-  const jeuSrc = urls[val] + ?slide=${slide}&reveal=${show};
+    const jeuSrc = `${urls[val]}?slide=${slide}&reveal=${show}`;
 
-  container.innerHTML = 
-    <h2>${nom}</h2>
-    <div class="wordwall-container">
-      <iframe src="${jeuSrc}" allowfullscreen></iframe>
-      <div class="mask-wordwall"></div>
-    </div>
-  ;
-}
+    container.innerHTML = `
+      <h2>${nom}</h2>
+      <div class="wordwall-container">
+        <iframe src="${jeuSrc}" allowfullscreen></iframe>
+        <div class="mask-wordwall"></div>
+      </div>
+    `;
+  }
+
   construireEquipes();
-updateJauges();
-updateManche();
-setInterval(() => {
   updateJauges();
-  updateManche(); // Si tu veux garder l'effet de changement immédiat
-  updateSlideEtReponse(); // Ajout ici
-}, 1000);
-  </script>
-</body>
-</html>
+  updateSlideEtReponse();
+
+  setInterval(() => {
+    updateJauges();
+    updateSlideEtReponse();
+  }, 1000);
+</script>
