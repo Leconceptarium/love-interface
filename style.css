@@ -2,15 +2,13 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Battle Quizz 💘</title>
+  <title>Battle Quiz 💔 CRÈVE-CŒUR</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Great+Vibes&display=swap');
-
     body {
       font-family: 'Rubik', sans-serif;
       text-align: center;
-      background: url('https://www.transparenttextures.com/patterns/paper-fibers.png') repeat #0e0e0e;
+      background: linear-gradient(180deg, #1a0f14, #0e0e0e);
       color: #fff;
       margin: 0;
       padding: 20px;
@@ -18,74 +16,12 @@
       overflow-x: hidden;
     }
 
-    body::before {
-      content: "💖";
-      font-size: 2rem;
-      position: fixed;
-      animation: float 5s linear infinite;
-      opacity: 0.05;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    @keyframes float {
-      0% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -60%) scale(1.2); }
-      100% { transform: translate(-50%, -50%) scale(1); }
-    }
-
     h1 {
       font-family: 'Great Vibes', cursive;
-      font-size: 3.5rem;
+      font-size: 3rem;
       color: #ff4d6d;
       text-shadow: 0 0 8px #ff4d6d88;
       margin-top: 20px;
-    }
-
-    .jeu-actif {
-      font-size: 2.2rem;
-      color: #ff95a5;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px #ff4d6d;
-      font-weight: bold;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      width: fit-content;
-      margin: 30px auto 10px;
-      font-family: 'Great Vibes', cursive;
-    }
-
-    .wheel-container {
-      margin: 40px auto;
-    }
-
-    #wheel {
-      font-size: 2rem;
-      padding: 20px;
-      border: 3px dashed #fff;
-      border-radius: 50%;
-      width: 200px;
-      margin: auto;
-      cursor: pointer;
-      background-color: #1f1f1f;
-      color: #fff;
-      transition: transform 0.2s ease;
-    }
-
-    #wheel:hover {
-      transform: scale(1.05);
-    }
-
-    #jauges {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      margin-top: 40px;
-      gap: 20px;
     }
 
     .team {
@@ -94,6 +30,7 @@
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 0 10px #0008;
+      margin: 10px auto;
     }
 
     .team-name {
@@ -142,7 +79,7 @@
     .wordwall-container iframe {
       display: block;
       width: 100%;
-      height: 700px;
+      height: 600px;
       border: none;
     }
 
@@ -156,57 +93,111 @@
       pointer-events: none;
     }
 
-    button {
-      background: #ff4d6d;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      margin: 5px;
-    }
-
-    button:hover {
-      background: #ff6e8c;
+    #jeu-wordwall h2 {
+      font-size: 2rem;
+      margin: 20px 0;
+      color: #ff4d6d;
+      text-shadow: 0 0 6px #ff4d6d55;
     }
   </style>
 </head>
 <body>
+  <h1>Battle Quiz 💔</h1>
 
-  <h1>Battle Quizz 💘</h1>
+  <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
+  <section id="jauges"></section>
 
-  <!-- TITRE DU JEU ACTIF -->
-  <div id="jeu-actif" class="jeu-actif">🎮 Choisissez une manche</div>
+  <!-- 🎯 JEU SELECTIONNÉ -->
+  <section id="jeu-wordwall"></section>
 
-  <div class="wheel-container">
-    <div id="wheel">🎡 Lancer la roue</div>
-  </div>
-
-  <div id="jauges">
-    <div class="team">
-      <div class="team-name">Équipe A</div>
-      <div class="life-bar"><div class="life-fill" style="width: 100%;"></div></div>
-    </div>
-    <div class="team">
-      <div class="team-name">Équipe B</div>
-      <div class="life-bar"><div class="life-fill" style="width: 100%;"></div></div>
-    </div>
-  </div>
-
-  <div class="wordwall-container">
-    <iframe src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0" allowfullscreen></iframe>
-    <div class="mask-wordwall"></div>
-  </div>
-
+  <!-- 🔁 Script dynamique -->
   <script>
-    // Fonction appelée par la page Game Master (ou à relier à la roue)
-    function afficherNomManche(nom) {
-      const titre = document.getElementById('jeu-actif');
-      titre.textContent = nom;
-    }
-  </script>
+    const urls = {
+      cupidon: "https://wordwall.net/fr/embed/your-url1",
+      rencard: "https://wordwall.net/fr/embed/your-url2",
+      blindtest: "https://wordwall.net/fr/embed/your-url3",
+      tentacule: "https://wordwall.net/fr/embed/your-url4",
+      impossible: "https://wordwall.net/fr/embed/your-url5"
+    };
 
+    function construireEquipes() {
+      const container = document.getElementById("jauges");
+      container.innerHTML = "";
+
+      let i = 1;
+      while (localStorage.getItem(`team${i}name`)) {
+        const nom = localStorage.getItem(`team${i}name`);
+        const vie = localStorage.getItem(`life${i}`) || 100;
+
+        const teamDiv = document.createElement("div");
+        teamDiv.className = "team";
+
+        const titre = document.createElement("div");
+        titre.className = "team-name";
+        titre.textContent = nom;
+
+        const barre = document.createElement("div");
+        barre.className = "life-bar";
+
+        const fill = document.createElement("div");
+        fill.className = "life-fill";
+        fill.style.width = vie + "%";
+        fill.id = "life" + i;
+
+        barre.appendChild(fill);
+        teamDiv.appendChild(titre);
+        teamDiv.appendChild(barre);
+        container.appendChild(teamDiv);
+
+        i++;
+      }
+    }
+
+    function updateJauges() {
+      let i = 1;
+      while (document.getElementById("life" + i)) {
+        const val = localStorage.getItem("life" + i) || 100;
+        const fill = document.getElementById("life" + i);
+        fill.style.width = val + "%";
+
+        const name = localStorage.getItem(`team${i}name`);
+        const titre = fill.parentElement.previousSibling;
+        if (name) titre.textContent = name;
+
+        i++;
+      }
+    }
+
+    function updateManche() {
+      const val = localStorage.getItem("mancheActive");
+      const container = document.getElementById("jeu-wordwall");
+
+      if (val && urls[val]) {
+        const nom = {
+          cupidon: "💘 Cupidon Détraqué",
+          rencard: "🎭 Rencard ou Cauchemar",
+          blindtest: "🎶 Blind Test Toxique",
+          tentacule: "🐙 Tentacule ou Tentation",
+          impossible: "💔 Amours Impossibles"
+        }[val];
+
+        container.innerHTML = `
+          <h2>${nom}</h2>
+          <div class="wordwall-container">
+            <iframe src="${urls[val]}" allowfullscreen></iframe>
+            <div class="mask-wordwall"></div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = "";
+      }
+    }
+
+    setInterval(() => {
+      construireEquipes();
+      updateJauges();
+      updateManche();
+    }, 1000);
+  </script>
 </body>
 </html>
