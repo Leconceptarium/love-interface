@@ -106,26 +106,9 @@
 </head>
 <body>
   <h1>Battle Quiz 💔</h1>
-
-  <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
   <section id="jauges"></section>
-
-  <!-- 🎯 JEU PAR DÉFAUT EN PAGE D’ACCUEIL -->
-  <div class="wordwall-container">
-    <iframe 
-      src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0" 
-      width="100%" 
-      height="600" 
-      frameborder="0" 
-      allowfullscreen>
-    </iframe>
-    <div class="mask-wordwall"></div>
-  </div>
-
-  <!-- 🎮 JEU SELECTIONNÉ -->
   <section id="jeu-wordwall"></section>
 
-  <!-- 🔁 Script dynamique -->
   <script>
     const urls = {
       cupidon: "cupidon.html",
@@ -138,12 +121,10 @@
     function construireEquipes() {
       const container = document.getElementById("jauges");
       container.innerHTML = "";
-
       let i = 1;
       while (localStorage.getItem(`team${i}name`)) {
         const nom = localStorage.getItem(`team${i}name`);
         const vie = localStorage.getItem(`life${i}`) || 100;
-
         const teamDiv = document.createElement("div");
         teamDiv.className = "team";
 
@@ -163,7 +144,6 @@
         teamDiv.appendChild(titre);
         teamDiv.appendChild(barre);
         container.appendChild(teamDiv);
-
         i++;
       }
     }
@@ -178,45 +158,49 @@
         const name = localStorage.getItem(`team${i}name`);
         const titre = fill.parentElement.previousSibling;
         if (name) titre.textContent = name;
-
         i++;
       }
     }
 
-   function updateSlideEtReponse() {
-  const val = localStorage.getItem("mancheActive");
-  const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
-  const show = localStorage.getItem("showAnswer") === "true";
+    function updateSlideEtReponse() {
+      const val = localStorage.getItem("mancheActive");
+      const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
+      const show = localStorage.getItem("showAnswer") === "true";
+      const container = document.getElementById("jeu-wordwall");
 
-  const container = document.getElementById("jeu-wordwall");
-  if (!val || !urls[val]) return;
+      if (!val || !urls[val]) return;
 
-  const nom = {
-    cupidon: "💘 Cupidon Détraqué",
-    rencard: "🎭 Rencard ou Cauchemar",
-    blindtest: "🎶 Blind Test Toxique",
-    tentacule: "🐙 Tentacule ou Tentation",
-    impossible: "💔 Amours Impossibles"
-  }[val];
+      const nom = {
+        cupidon: "💘 Cupidon Détraqué",
+        rencard: "🎭 Rencard ou Cauchemar",
+        blindtest: "🎶 Blind Test Toxique",
+        tentacule: "🐙 Tentacule ou Tentation",
+        impossible: "💔 Amours Impossibles"
+      }[val];
 
-  const jeuSrc = urls[val] + `?slide=${slide}&reveal=${show}`;
+      const jeuSrc = urls[val] + `?slide=${slide}&reveal=${show}`;
 
-  container.innerHTML = `
-    <h2>${nom}</h2>
-    <div class="wordwall-container">
-      <iframe src="${jeuSrc}" allowfullscreen></iframe>
-      <div class="mask-wordwall"></div>
-    </div>
-  `;
-}
-  construireEquipes();
-updateJauges();
-updateManche();
-setInterval(() => {
-  updateJauges();
-  updateManche(); // Si tu veux garder l'effet de changement immédiat
-  updateSlideEtReponse(); // Ajout ici
-}, 1000);
+      container.innerHTML = `
+        <h2>${nom}</h2>
+        <div class="wordwall-container">
+          <iframe src="${jeuSrc}" allowfullscreen></iframe>
+          <div class="mask-wordwall"></div>
+        </div>
+      `;
+    }
+
+    window.addEventListener("storage", (e) => {
+      if (["mancheActive", "slideIndex", "showAnswer"].includes(e.key)) {
+        updateSlideEtReponse();
+      }
+      if (e.key && e.key.startsWith("life")) {
+        updateJauges();
+      }
+    });
+
+    construireEquipes();
+    updateJauges();
+    updateSlideEtReponse();
   </script>
 </body>
 </html>
