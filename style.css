@@ -1,5 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Great+Vibes&display=swap');
 
+.wordwall-container {
+  position: relative;
+  max-width: 100%;
+  margin: 40px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(255, 77, 109, 0.2);
+}
+
+.wordwall-container iframe {
+  display: block;
+  width: 100%;
+  height: 600px;
+  border: none;
+}
+
+.mask-wordwall {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(to top, #0e0e0e 80%, transparent);
+  pointer-events: none;
+}
 body {
   font-family: 'Rubik', sans-serif;
   text-align: center;
