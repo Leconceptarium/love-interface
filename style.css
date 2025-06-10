@@ -113,11 +113,11 @@
   <!-- 🔁 Script dynamique -->
   <script>
     const urls = {
-      cupidon: "https://wordwall.net/fr/embed/your-url1",
-      rencard: "https://wordwall.net/fr/embed/your-url2",
-      blindtest: "https://wordwall.net/fr/embed/your-url3",
-      tentacule: "https://wordwall.net/fr/embed/your-url4",
-      impossible: "https://wordwall.net/fr/embed/your-url5"
+      cupidon: "cupidon.html",
+      rencard: "rencard.html",
+      blindtest: "blindtest.html",
+      tentacule: "tentacule.html",
+      impossible: "impossible.html"
     };
 
     function construireEquipes() {
