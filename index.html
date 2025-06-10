@@ -12,73 +12,227 @@
       color: #fff;
       margin: 0;
       padding: 30px;
+      overflow-x: hidden;
+      position: relative;
     }
-    h1 { font-family: 'Great Vibes', cursive; font-size: 3.2rem; color: #ff4d6d; }
-    h2 { font-size: 1.8rem; color: #ff95a5; }
-    .team { width: 40%; background: #1c1c1c; padding: 15px; border-radius: 12px; margin: 10px auto; }
-    .team-name { color: #ff95a5; }
-    .life-bar { background: #333; height: 35px; border-radius: 20px; overflow: hidden; }
-    .life-fill { background: linear-gradient(90deg, #ff4d6d, #ff95a5); height: 100%; }
-    iframe { width: 100%; height: 600px; border-radius: 8px; }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.2rem;
+      color: #ff4d6d;
+      text-shadow: 0 0 8px #ff4d6d88;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 40px;
+      color: #ff95a5;
+      text-shadow: 0 0 6px #ff4d6d55;
+    }
+
+    .team {
+      width: 40%;
+      background: #1c1c1c;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #0008;
+      margin: 10px auto;
+    }
+
+    .team-name {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #ff95a5;
+    }
+
+    .life-bar {
+      width: 100%;
+      height: 35px;
+      background-color: #333;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .life-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff4d6d, #ff95a5);
+      transition: width 0.3s ease;
+      animation: heartbeat 3.5s infinite;
+      border-radius: 250px;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 77, 109, 0.8);
+      }
+    }
+
+    .wordwall-container {
+      position: relative;
+      max-width: 100%;
+      margin: 40px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(255, 77, 109, 0.2);
+    }
+
+    .wordwall-container iframe {
+      display: block;
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+
+    .mask-wordwall {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to top, #0e0e0e 80%, transparent);
+      pointer-events: none;
+    }
+
+    iframe {
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
   <h1>Battle Quiz 💔</h1>
+
+  <!-- ❤️ JAUGES DE VIE DYNAMIQUES -->
   <section id="jauges"></section>
-  <section id="jeu-wordwall">
-    <iframe src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428"></iframe>
-  </section>
 
-  <script>
-    const urls = {
-      cupidon: "cupidon.html",
-      rencard: "rencard.html",
-      blindtest: "blindtest.html",
-      tentacule: "tentacule.html",
-      impossible: "impossible.html",
-      accueil: "index.html"
-    };
+  <!-- 🎯 JEU PAR DÉFAUT EN PAGE D’ACCUEIL -->
+  <div class="wordwall-container">
+    <iframe 
+      src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0" 
+      width="100%" 
+      height="600" 
+      frameborder="0" 
+      allowfullscreen>
+    </iframe>
+    <div class="mask-wordwall"></div>
+  </div>
 
-    function construireEquipes() {
-      const container = document.getElementById("jauges");
-      container.innerHTML = "";
-      let i = 1;
-      while (localStorage.getItem(`team${i}name`)) {
-        const nom = localStorage.getItem(`team${i}name`);
-        const vie = localStorage.getItem(`life${i}`) || 100;
-        container.innerHTML += `
-          <div class="team">
-            <h3 class="team-name">${nom}</h3>
-            <div class="life-bar">
-              <div class="life-fill" style="width:${vie}%"></div>
-            </div>
-          </div>`;
-        i++;
-      }
+  <!-- 🎮 JEU SELECTIONNÉ -->
+  <section id="jeu-wordwall"></section>
+
+  <!-- 🔁 Scripts dynamiques -->
+<script>
+  const urls = {
+    cupidon: "cupidon.html",
+    rencard: "rencard.html",
+    blindtest: "blindtest.html",
+    tentacule: "tentacule.html",
+    impossible: "impossible.html"
+  };
+
+  function construireEquipes() {
+    const container = document.getElementById("jauges");
+    container.innerHTML = "";
+
+    let i = 1;
+    while (localStorage.getItem(`team${i}name`)) {
+      const nom = localStorage.getItem(`team${i}name`);
+      const vie = localStorage.getItem(`life${i}`) || 100;
+
+      const teamDiv = document.createElement("div");
+      teamDiv.className = "team";
+
+      const titre = document.createElement("h3");
+      titre.className = "team-name";
+      titre.textContent = nom;
+
+      const barre = document.createElement("div");
+      barre.className = "life-bar";
+
+      const fill = document.createElement("div");
+      fill.className = "life-fill";
+      fill.style.width = vie + "%";
+      fill.id = "life" + i;
+
+      barre.appendChild(fill);
+      teamDiv.appendChild(titre);
+      teamDiv.appendChild(barre);
+      container.appendChild(teamDiv);
+
+      i++;
     }
+  }
 
-    function updateGameView() {
-      const manche = localStorage.getItem("mancheActive") || "accueil";
-      const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
-      const show = localStorage.getItem("reveal") === "true";
-      const container = document.getElementById("jeu-wordwall");
+  function updateJauges() {
+    let i = 1;
+    while (document.getElementById("life" + i)) {
+      const val = localStorage.getItem("life" + i) || 100;
+      const fill = document.getElementById("life" + i);
+      fill.style.width = val + "%";
 
-      if (manche === "accueil") {
-        container.innerHTML = `<iframe src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428"></iframe>`;
-      } else if (urls[manche]) {
-        container.innerHTML = `<iframe src="${urls[manche]}?slide=${slide}&reveal=${show}"></iframe>`;
-      }
+      const name = localStorage.getItem(`team${i}name`);
+      const titre = fill.parentElement.previousSibling;
+      if (name) titre.textContent = name;
+
+      i++;
     }
+  }
 
-    function syncChanges() {
-      construireEquipes();
-      updateGameView();
+  function updateSlideEtReponse() {
+    const val = localStorage.getItem("mancheActive");
+    const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
+    const show = localStorage.getItem("reveal") === "true";
+
+    const container = document.getElementById("jeu-wordwall");
+    if (!val || !urls[val]) return;
+
+    const nom = {
+      cupidon: "💘 Cupidon Détraqué",
+      rencard: "🎭 Rencard ou Cauchemar",
+      blindtest: "🎶 Blind Test Toxique",
+      tentacule: "🐙 Tentacule ou Tentation",
+      impossible: "💔 Amours Impossibles"
+    }[val];
+
+    const jeuSrc = `${urls[val]}?slide=${slide}&reveal=${show}`;
+
+    container.innerHTML = `
+      <h2>${nom}</h2>
+      <div class="wordwall-container">
+        <iframe src="${jeuSrc}" allowfullscreen></iframe>
+        <div class="mask-wordwall"></div>
+      </div>
+    `;
+  }
+
+  // 🔁 Actualisation continue
+  construireEquipes();
+  updateJauges();
+  updateSlideEtReponse();
+
+  setInterval(() => {
+    updateJauges();
+    updateSlideEtReponse();
+  }, 1000);
+
+  // ✅ Redirection automatique quand le Game Master change de jeu
+  let ancienneManche = null;
+  setInterval(() => {
+    const manche = localStorage.getItem("mancheActive");
+    const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
+    const show = localStorage.getItem("reveal") === "true";
+
+    if (manche && urls[manche] && manche !== ancienneManche) {
+      ancienneManche = manche;
+      const url = `${urls[manche]}?slide=${slide}&reveal=${show}`;
+      window.location.href = url;
     }
-
-    window.addEventListener("storage", syncChanges);
-    setInterval(syncChanges, 500);
-
-    syncChanges();
-  </script>
+  }, 1000);
+</script>
 </body>
 </html>
