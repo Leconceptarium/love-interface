@@ -110,10 +110,9 @@
   <!-- 🎯 JEU SELECTIONNÉ -->
   <section id="jeu-wordwall"></section>
 
-  <!-- 🔁 Script dynamique -->
   <script>
     const urls = {
-      cupidon: "cupidon.html",
+     cupidon: "cupidon.html",
       rencard: "rencard.html",
       blindtest: "blindtest.html",
       tentacule: "tentacule.html",
@@ -123,7 +122,6 @@
     function construireEquipes() {
       const container = document.getElementById("jauges");
       container.innerHTML = "";
-
       let i = 1;
       while (localStorage.getItem(`team${i}name`)) {
         const nom = localStorage.getItem(`team${i}name`);
@@ -148,7 +146,6 @@
         teamDiv.appendChild(titre);
         teamDiv.appendChild(barre);
         container.appendChild(teamDiv);
-
         i++;
       }
     }
@@ -159,11 +156,9 @@
         const val = localStorage.getItem("life" + i) || 100;
         const fill = document.getElementById("life" + i);
         fill.style.width = val + "%";
-
         const name = localStorage.getItem(`team${i}name`);
         const titre = fill.parentElement.previousSibling;
         if (name) titre.textContent = name;
-
         i++;
       }
     }
@@ -171,7 +166,6 @@
     function updateManche() {
       const val = localStorage.getItem("mancheActive");
       const container = document.getElementById("jeu-wordwall");
-
       if (val && urls[val]) {
         const nom = {
           cupidon: "💘 Cupidon Détraqué",
