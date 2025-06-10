@@ -40,6 +40,13 @@
   </section>
 
   <section>
+    <h2>Contrôle des slides</h2>
+    <button onclick="precedentSlide()">⬅️ Précédente</button>
+    <button onclick="suivantSlide()">➡️ Suivante</button>
+    <button onclick="afficherReponse()">✅ Afficher la réponse</button>
+  </section>
+
+  <section>
     <button class="reset" onclick="reinitialiser()">🧹 Recommencer la partie</button>
   </section>
 
@@ -142,6 +149,22 @@
 
     function choisirManche(val) {
       localStorage.setItem("mancheActive", val);
+    }
+
+    function suivantSlide() {
+      let i = parseInt(localStorage.getItem("slideIndex")) || 0;
+      localStorage.setItem("slideIndex", i + 1);
+      localStorage.setItem("reveal", "false");
+    }
+
+    function precedentSlide() {
+      let i = parseInt(localStorage.getItem("slideIndex")) || 0;
+      localStorage.setItem("slideIndex", Math.max(0, i - 1));
+      localStorage.setItem("reveal", "false");
+    }
+
+    function afficherReponse() {
+      localStorage.setItem("reveal", "true");
     }
 
     function reinitialiser() {
