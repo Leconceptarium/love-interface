@@ -3,73 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cupidon Détraqué - Battle Quizz</title>
+  <title>Cupidon Détraqué - Battle Quiz</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
       background-color: #fbeaec;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       height: 100vh;
+      overflow: auto;
     }
     .slide {
       display: none;
       text-align: center;
       padding: 2rem;
     }
-    .active {
-      display: block;
-    }
-    h1 {
-      font-size: 3rem;
-      color: #d33682;
-    }
-    .title {
-      font-size: 2rem;
-      color: #333;
-      margin: 2rem 0;
-    }
-    .answer {
-      font-size: 1.5rem;
-      margin-top: 1rem;
-      color: #00703c;
-      display: none;
-    }
-    .reveal {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      background-color: #555;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button {
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      background-color: #d33682;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover, .reveal:hover {
-      background-color: #b1236c;
-    }
+    .active { display: block; }
+    h1 { font-size: 3rem; color: #d33682; }
+    .title { font-size: 2rem; color: #333; margin: 2rem 0; }
+    .answer { font-size: 1.5rem; margin-top: 1rem; color: #00703c; display: none; }
+
+    #jauges { display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem; }
+    .team { margin: 10px; padding: 10px; background: #fff; border-radius: 8px; box-shadow: 0 0 10px #ddd; width: 200px; }
+    .life-bar { background-color: #333; border-radius: 20px; overflow: hidden; }
+    .life-fill { height: 20px; background: #ff4d6d; }
   </style>
 </head>
 <body>
-  <div id="slides">
-    <!-- Slides will be populated with JavaScript -->
-  </div>
+  <section id="jauges"></section>
+  <div id="slides"></div>
 
-  <script>
+ <script>
     const filmData = [
       { title: "L’Amour entre deux tranches de pain", answer: "Faux" },
       { title: "Un Jour sans Elle", answer: "Faux" },
@@ -93,49 +60,60 @@
       { title: "Un prince presque charmant", answer: "Vrai" }
     ];
 
-    const slidesContainer = document.getElementById('slides');
 
-    const introSlide = document.createElement('div');
-    introSlide.classList.add('slide', 'active');
-    introSlide.innerHTML = `
-      <h1>Vrai film romantique ou invention totale ?</h1>
-      <div class="title">div>
-      <button onclick="nextSlide()">Commencer</button>
-    `;
-    slidesContainer.appendChild(introSlide);
+    let currentSlide = 0;
+    const slidesContainer = document.getElementById('slides');
 
     filmData.forEach(film => {
       const slide = document.createElement('div');
-      slide.classList.add('slide');
+      slide.className = 'slide';
       slide.innerHTML = `
         <div class="title">${film.title}</div>
         <div class="answer">Réponse : ${film.answer}</div>
-        <button class="reveal" onclick="this.previousElementSibling.style.display='block'">Afficher la réponse</button>
       `;
       slidesContainer.appendChild(slide);
     });
 
-    const finalSlide = document.createElement('div');
-    finalSlide.classList.add('slide');
-    finalSlide.innerHTML = `<div class="title">Fin du jeu ! Merci d’avoir joué 💔</div>`;
-    slidesContainer.appendChild(finalSlide);
-
-    let current = 0;
-    const slides = document.querySelectorAll('.slide');
-
-    function nextSlide() {
-      if (current < slides.length - 1) {
-        slides[current].classList.remove('active');
-        current++;
-        slides[current].classList.add('active');
+    function updateSlides() {
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+      const reveal = localStorage.getItem("reveal") === "true";
+      if (slides[currentSlide]) {
+        slides[currentSlide].querySelector('.answer').style.display = reveal ? 'block' : 'none';
       }
     }
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'ArrowRight' || e.key === ' ') {
-        nextSlide();
+    function construireEquipes() {
+      const container = document.getElementById("jauges");
+      container.innerHTML = "";
+      let i = 1;
+      while (localStorage.getItem(`team${i}name`)) {
+        const nom = localStorage.getItem(`team${i}name`);
+        const vie = localStorage.getItem(`life${i}`) || 100;
+        container.innerHTML += `
+          <div class="team">
+            <strong>${nom}</strong>
+            <div class="life-bar"><div class="life-fill" style="width:${vie}%"></div></div>
+          </div>`;
+        i++;
       }
-    });
+    }
+
+    function syncWithGM() {
+      const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
+      if (slide !== currentSlide) {
+        currentSlide = slide;
+        updateSlides();
+      }
+      construireEquipes();
+    }
+
+    window.addEventListener('storage', syncWithGM);
+    setInterval(syncWithGM, 500);
+
+    // Initialisation
+    updateSlides();
+    construireEquipes();
   </script>
 </body>
 </html>
