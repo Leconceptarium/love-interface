@@ -1,157 +1,197 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Great+Vibes&display=swap');
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Battle Quizz 💘</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    /* Ton CSS complet déjà copié ci-dessus */
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&family=Great+Vibes&display=swap');
 
-.wordwall-container {
-  position: relative;
-  max-width: 100%;
-  margin: 40px auto;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 25px rgba(255, 77, 109, 0.2);
-}
+    .wordwall-container {
+      position: relative;
+      max-width: 100%;
+      margin: 40px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(255, 77, 109, 0.2);
+    }
 
-.wordwall-container iframe {
-  display: block;
-  width: 100%;
-  height: 600px;
-  border: none;
-}
+    .wordwall-container iframe {
+      display: block;
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
 
-.mask-wordwall {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  background: linear-gradient(to top, #0e0e0e 80%, transparent);
-  pointer-events: none;
-}
-body {
-  font-family: 'Rubik', sans-serif;
-  text-align: center;
-  background: linear-gradient(180deg, #1a0f14, #0e0e0e);
-  color: #fff;
-  margin: 0;
-  padding: 20px;
-  position: relative;
-  overflow-x: hidden;
-}
+    .mask-wordwall {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to top, #0e0e0e 80%, transparent);
+      pointer-events: none;
+    }
 
-body::before {
-  content: "💖";
-  font-size: 2rem;
-  position: fixed;
-  animation: float 5s linear infinite;
-  opacity: 0.05;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
+    body {
+      font-family: 'Rubik', sans-serif;
+      text-align: center;
+      background: linear-gradient(180deg, #1a0f14, #0e0e0e);
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-@keyframes float {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -60%) scale(1.2); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-}
+    body::before {
+      content: "💖";
+      font-size: 2rem;
+      position: fixed;
+      animation: float 5s linear infinite;
+      opacity: 0.05;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
 
-h1 {
-  font-family: 'Great Vibes', cursive;
-  font-size: 3rem;
-  color: #ff4d6d;
-  text-shadow: 0 0 8px #ff4d6d88;
-  margin-top: 20px;
-}
+    @keyframes float {
+      0% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -60%) scale(1.2); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
 
-h2 {
-  font-family: 'Rubik', sans-serif;
-  color: #ff4d6d;
-  text-shadow: 0 0 5px #ff4d6d66;
-  margin-top: 20px;
-}
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: #ff4d6d;
+      text-shadow: 0 0 8px #ff4d6d88;
+      margin-top: 20px;
+    }
 
-.wheel-container {
-  margin: 40px auto;
-}
+    h2 {
+      font-family: 'Rubik', sans-serif;
+      color: #ff4d6d;
+      text-shadow: 0 0 5px #ff4d6d66;
+      margin-top: 20px;
+    }
 
-#wheel {
-  font-size: 2rem;
-  padding: 20px;
-  border: 3px dashed #fff;
-  border-radius: 50%;
-  width: 200px;
-  margin: auto;
-  cursor: pointer;
-  background-color: #1f1f1f;
-  color: #fff;
-  transition: transform 0.2s ease;
-}
+    .wheel-container {
+      margin: 40px auto;
+    }
 
-#wheel:hover {
-  transform: scale(1.05);
-}
+    #wheel {
+      font-size: 2rem;
+      padding: 20px;
+      border: 3px dashed #fff;
+      border-radius: 50%;
+      width: 200px;
+      margin: auto;
+      cursor: pointer;
+      background-color: #1f1f1f;
+      color: #fff;
+      transition: transform 0.2s ease;
+    }
 
-#jauges {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin-top: 40px;
-  gap: 20px;
-}
+    #wheel:hover {
+      transform: scale(1.05);
+    }
 
-.team {
-  width: 40%;
-  background: #1c1c1c;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #0008;
-}
+    #jauges {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-top: 40px;
+      gap: 20px;
+    }
 
-.team-name {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  color: #ff95a5;
-}
+    .team {
+      width: 40%;
+      background: #1c1c1c;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #0008;
+    }
 
-.life-bar {
-  width: 100%;
-  height: 35px;
-  background-color: #333;
-  border-radius: 20px;
-  overflow: hidden;
-  position: relative;
-}
+    .team-name {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #ff95a5;
+    }
 
-.life-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ff4d6d, #ff95a5);
-  transition: width 0.3s ease;
-  animation: heartbeat 3.5s infinite;
-  border-radius: 250px;
-}
+    .life-bar {
+      width: 100%;
+      height: 35px;
+      background-color: #333;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
 
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 77, 109, 0.8);
-  }
-}
+    .life-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff4d6d, #ff95a5);
+      transition: width 0.3s ease;
+      animation: heartbeat 3.5s infinite;
+      border-radius: 250px;
+    }
 
-button {
-  background: #ff4d6d;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 30px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  margin: 5px;
-}
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 77, 109, 0.4);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 77, 109, 0.8);
+      }
+    }
 
-button:hover {
-  background: #ff6e8c;
-}
+    button {
+      background: #ff4d6d;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #ff6e8c;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Battle Quizz 💘</h1>
+
+  <div class="wheel-container">
+    <div id="wheel">🎡 Lancer la roue</div>
+  </div>
+
+  <div id="jauges">
+    <div class="team">
+      <div class="team-name">Équipe A</div>
+      <div class="life-bar"><div class="life-fill" style="width: 100%;"></div></div>
+    </div>
+    <div class="team">
+      <div class="team-name">Équipe B</div>
+      <div class="life-bar"><div class="life-fill" style="width: 100%;"></div></div>
+    </div>
+  </div>
+
+  <div class="wordwall-container">
+    <iframe 
+      src="https://wordwall.net/fr/embed/24ba096164424d1281d892f070aac428?themeId=49&templateId=30&fontStackId=0" 
+      allowfullscreen>
+    </iframe>
+    <div class="mask-wordwall"></div>
+  </div>
+
+</body>
+</html>
