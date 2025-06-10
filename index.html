@@ -125,7 +125,7 @@
   <!-- 🎮 JEU SELECTIONNÉ -->
   <section id="jeu-wordwall"></section>
 
-  <!-- 🔁 Script dynamique -->
+  <!-- 🔁 Scripts dynamiques -->
 <script>
   const urls = {
     cupidon: "cupidon.html",
@@ -210,6 +210,7 @@
     `;
   }
 
+  // 🔁 Actualisation continue
   construireEquipes();
   updateJauges();
   updateSlideEtReponse();
@@ -218,4 +219,20 @@
     updateJauges();
     updateSlideEtReponse();
   }, 1000);
+
+  // ✅ Redirection automatique quand le Game Master change de jeu
+  let ancienneManche = null;
+  setInterval(() => {
+    const manche = localStorage.getItem("mancheActive");
+    const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
+    const show = localStorage.getItem("reveal") === "true";
+
+    if (manche && urls[manche] && manche !== ancienneManche) {
+      ancienneManche = manche;
+      const url = `${urls[manche]}?slide=${slide}&reveal=${show}`;
+      window.location.href = url;
+    }
+  }, 1000);
 </script>
+</body>
+</html>
