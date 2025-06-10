@@ -37,6 +37,7 @@
       <option value="tentacule">Tentacule ou Tentation</option>
       <option value="impossible">Amours Impossibles</option>
     </select>
+    <button onclick="forcerMajManche()">Démarrer le jeu</button>
   </section>
 
   <section>
@@ -149,6 +150,14 @@
 
     function choisirManche(val) {
       localStorage.setItem("mancheActive", val);
+    }
+
+    function forcerMajManche() {
+      let current = localStorage.getItem("mancheActive") || "";
+      localStorage.setItem("mancheActive", "");
+      setTimeout(() => {
+        localStorage.setItem("mancheActive", current);
+      }, 100);
     }
 
     function suivantSlide() {
