@@ -183,36 +183,39 @@
       }
     }
 
-    function updateManche() {
-      const val = localStorage.getItem("mancheActive");
-      const container = document.getElementById("jeu-wordwall");
+   function updateSlideEtReponse() {
+  const val = localStorage.getItem("mancheActive");
+  const slide = parseInt(localStorage.getItem("slideIndex")) || 0;
+  const show = localStorage.getItem("showAnswer") === "true";
 
-      if (val && urls[val]) {
-        const nom = {
-          cupidon: "💘 Cupidon Détraqué",
-          rencard: "🎭 Rencard ou Cauchemar",
-          blindtest: "🎶 Blind Test Toxique",
-          tentacule: "🐙 Tentacule ou Tentation",
-          impossible: "💔 Amours Impossibles"
-        }[val];
+  const container = document.getElementById("jeu-wordwall");
+  if (!val || !urls[val]) return;
 
-        container.innerHTML = `
-          <h2>${nom}</h2>
-          <div class="wordwall-container">
-            <iframe src="${urls[val]}" allowfullscreen></iframe>
-            <div class="mask-wordwall"></div>
-          </div>
-        `;
-      } else {
-        container.innerHTML = "";
-      }
-    }
+  const nom = {
+    cupidon: "💘 Cupidon Détraqué",
+    rencard: "🎭 Rencard ou Cauchemar",
+    blindtest: "🎶 Blind Test Toxique",
+    tentacule: "🐙 Tentacule ou Tentation",
+    impossible: "💔 Amours Impossibles"
+  }[val];
 
+  const jeuSrc = urls[val] + `?slide=${slide}&reveal=${show}`;
+
+  container.innerHTML = `
+    <h2>${nom}</h2>
+    <div class="wordwall-container">
+      <iframe src="${jeuSrc}" allowfullscreen></iframe>
+      <div class="mask-wordwall"></div>
+    </div>
+  `;
+}
   construireEquipes();
 updateJauges();
 updateManche();
 setInterval(() => {
   updateJauges();
+  updateManche(); // Si tu veux garder l'effet de changement immédiat
+  updateSlideEtReponse(); // Ajout ici
 }, 1000);
   </script>
 </body>
